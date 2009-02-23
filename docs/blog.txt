@@ -1,0 +1,85 @@
+lithium.blog is a simple web-logging application which can be used for multi-user, multi-domain websites.
+
+Once lithium is installed and on your ``PYTHON_PATH`` you can add it to any Django project by:
+
+1. Add ``lithium.blog`` to the ``INSTALLED_APPS`` setting of your Django project.
+2. Add this line to your site's root URLConf: ``(r'^blog/', include('lithium.blog.urls')),``, it is not required that the blog is installed at ``/blog/``, on my site I set up the url as ``/posts/``.
+3. Now all that is left to do, is run ``python manage.py syncdb`` on your project so that the Posts table is added to the database.
+
+### Settings
+Some of the application's behavior can be configured by adding the appropriate settings to your project's settings file.
+
+#### BLOG_PAGINATE_BY
+Default: ``10``
+
+This is the amount of posts per page on any post list pages, such as the main post archive, tag post archive etc.
+
+#### BLOG_PING
+Default: ``not DEBUG``, this means that if ``DEBUG`` is set to True, it will not ping, if ``DEBUG`` is False, it will ping.
+
+When a post is created, if this is set to True, a post will be pinged to the servers in ``BLOG_PING_SERVERS``
+
+#### BLOG_PING_SERVERS
+Default: ``(
+    'http://blogsearch.google.com/ping/RPC2',
+    'http://rpc.technorati.com/rpc/ping',
+    'http://api.my.yahoo.com/rss/ping',
+    'http://ping.feedburner.com',
+)``
+
+This is a tuple of servers to be pinged.
+
+#### BLOG_FEED_ITEMS
+Default: ``20``
+
+This is the amount of posts to display in the RSS Feeds for the blog.
+
+### Template Tags
+``lithiuum.blog.templattags.blog`` modules has a few template tags for adding infomation to sidebars and/or footers of a blog. They can be loaded via ``{% load 'blog' %}``
+#### Get latest posts
+Gets a list of the latest posts and inserts them into the template context with a variable containing that value whose name is define by the 'as' clause. Can use limit, to limit the amount of posts returned.
+
+Syntax:
+
+    {% get_latest_posts as [varname] %}
+    {% get_latest_posts as [varname] limit [limit] %}
+    {% get_latest_posts for [user] as [varname] limit [limit] %}
+
+Example usage:
+
+    {% get_latest_posts as post_list limit 5 %}
+    {% for post in post_list %}
+        {{ post.tite }}
+    {% endfor %}
+
+#### Get category list
+Gets a list of categories in alphabetical order limited by a limit. The list of categories will be inserted into the template context with a variable containing that value whose name is define by the 'as' clause. If limit not supplied, the default of 10 will be used.
+    
+Syntax:
+
+    {% get_category_list as [varname] %}
+    {% get_category_list as [varname] limit [limit] %}
+    
+Example usage:
+
+    {% get_category_list as category_list  %}
+    {% for category in category_list %}
+        {{ post.tite }}
+    {% endfor %}
+
+### Templates
+There are two templates which are used, these are ``blog/post_list.html`` and ``blog/post_detail.html``.
+
+#### blog/post_list.html
+This template will get passed:
+
+- ``post_list``: The list of posts, this can be iterated over to display each Post within.
+- ``is_paginated``: A boolean representing whether the results are paginated. Specifically, this is set to False if the number of available posts is less than or equal to paginate_by.
+
+If the results are paginated, the context will contain these extra variables:
+
+- ``paginator``: An instance of ``django.core.paginator.Paginator``.
+- ``page_obj``: An instance of ``django.core.paginator.Page``.
+
+#### blog/post_detail.html
+This template will get passed a ``post`` in the template context ``post``

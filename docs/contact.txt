@@ -1,0 +1,19 @@
+Contact is a simple Django contact form, it will allow users of your website to easily contact you via email.
+
+Once lithium is installed and on your ``PYTHON_PATH`` you can add it to any Django project by:
+
+1. Add ``lithium.contact`` to the ``INSTALLED_APPS`` setting of your Django project.
+2. Add this line to your site's root URLConf: ``(r'^contact/', include('lithium.contact.urls')),``
+
+Now all you need to do is point people to /contact/ of your website and they will be displayed a contact form. Once the form is filled out, on submission it will be emailed to ever person on the ``MANAGERS`` list in your ``settings.py``.
+
+### Using your own templates
+The contact form is displayed via ``contact/contact_form.html`` and in there you can just display the form like:
+    
+    :::html
+    <form action="{% url contact_form %}" method="POST">
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+    
+Once this form is submitted, and it has passed the validation tests. The user will be sent to ``contact/contact_confirmation .html``, this just tells the user there message has been sent.

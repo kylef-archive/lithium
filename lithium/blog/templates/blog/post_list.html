@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load markup blog %}
+
+{% block title %}Post list{% endblock %}
+
+{% block content %}
+{% for post in post_list %}
+<div class="post">
+    <span class="meta">{{ post.pub_date|date:"Y M d" }}</span>
+    <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+    {{ post.content|markdown:"safe" }}
+</div>
+{% endfor %}
+
+{% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.number|add:"-1" }}">Previous posts</a>
+{% endif %}
+
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.number|add:"1" }}">Next posts</a>
+{% endif %}
+{% endblock %}

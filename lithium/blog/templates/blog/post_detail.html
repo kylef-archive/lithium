@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load markup %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="post">
+    <span class="meta">{{ post.pub_date|date:"Y M d" }}</span>
+    {{ post.content|markdown:"safe" }}
+</div>
+
+{% if post.enable_comments %}
+  {% load comments %}
+  <h3>Comments</h3>
+  {% render_comment_list for post %}
+  {% render_comment_form for post %}
+{% endif %}
+{% endblock %}
