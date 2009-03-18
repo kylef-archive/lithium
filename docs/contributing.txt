@@ -1,0 +1,21 @@
+.. _contributing:
+
+=======================
+Contributing to Lithium
+=======================
+
+If you would like to help with Lithium, here you can find what needs to be done and how to contribute.
+
+Ideas
+=====
+
+If you have any ideas on what could be added to Lithium, whether its a small template tag to an existing lithium app, or a new app. You can send your ideas to `kylef`_.
+
+Code
+====
+
+If you have any patches for Lithium, you could send them to `kylef`_ and if the patches are good, he will add them. You could also fork the git repository, and send kylef a link to the git repository. Then kylef can keep track of what you are doing, and merge it back into the main repository if the changes are good.
+
+Before making any changes or patches, please look closely at how lithium is written, such as 4 spaces instead of tabs. Follow the style of the code in your patches.
+
+.. _kylef: http://kylefuller.co.uk/contact/

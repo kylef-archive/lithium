@@ -1,0 +1,37 @@
+Lithium
+=======
+
+Lithium is a set of applications written for the Django web framework. Lithium's goal is to provide every generic application a user may want on their website, such as a blog, forum, wiki, etc. Lithium could be installed to work as a content management system, my own personal website is ran by Lithium, and a few django apps such as flatpages.
+
+First steps
+-----------
+
+    * :ref:`Download <download>`
+    * :ref:`Installation <install>`
+    * :ref:`Contributing <contributing>`
+
+Applications
+------------
+
+Applications included with the latest version of Lithium:
+
+    * :ref:`Blog <blog-index>`
+    * :ref:`Contact <contact-index>`
+
+Applications which are not finished
+-----------------------------------
+
+These applications are still being developed, weather they are testing, or not even started yet. This list is more of a list of what's left to-do:
+
+    * Forum
+    * Store
+    * Wiki
+    * Profiles
+    * Media
+
+Getting Help
+------------
+
+If you have any problems with Lithium, or have any suggestions you can contact `kylef`_, or ask in the IRC Channel: #lithium at irc.freenode.org.
+
+.. _kylef: http://kylefuller.co.uk/contact/

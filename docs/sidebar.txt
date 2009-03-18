@@ -1,9 +1,0 @@
-#### Pages
-- [Overview](http://kylefuller.co.uk/projects/lithium/overview/)
-- [Blog](http://kylefuller.co.uk/projects/lithium/blog/)
-- [Contact](http://kylefuller.co.uk/projects/lithium/contact/)
-
-#### Download
-- [Zip Archive](http://github.com/kylef/lithium/zipball/master)
-- [Tarball](http://github.com/kylef/pyppp/tarball/master)
-- [Git](http://github.com/kylef/lithium/)

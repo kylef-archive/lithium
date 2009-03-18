@@ -1,0 +1,23 @@
+.. _contents:
+
+==============================
+Lithium documentation contents
+==============================
+
+.. toctree::
+    :maxdepth: 2
+    
+    index
+    install
+    download
+    contributing
+
+Lithium applications
+====================
+
+The following documentation covers every application included with Lithium.
+
+.. toctree::
+    :maxdepth: 2
+    
+    apps/index

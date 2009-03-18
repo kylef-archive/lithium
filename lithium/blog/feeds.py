@@ -9,7 +9,7 @@ class LatestPosts(Feed):
     title = '%s feed' % site.name
     link = '/posts/'
     description = 'Latest posts at %s' % site.name
-    description_template = 'blog/feed_description.html'
+    description_template = 'blog/feed_description.html' 
     
     def item_pubdate(self, item):
         return item.pub_date

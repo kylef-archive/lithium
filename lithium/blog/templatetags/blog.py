@@ -54,14 +54,16 @@ class CategoryNode(BaseNode):
 #@register.tag
 def get_latest_posts(parser, token):
     """
-    Gets a list of the latest posts and inserts them into the template
-    context with a variable containing that value whose name is define
-    by the 'as' clause. Can use limit, to limit the amount of posts
-    returned.
+    This template tag will grab a list of the latest posts and insert them
+    into the template context defined after the 'as' clause. Optionally, you
+    can pass two other variables, a user, and a limit. The user clause will
+    only display posts where the author is that user. The limit will limit the
+    amount of posts in the list (the default is 5).
     
     Syntax::
         {% get_latest_posts as [varname] %}
         {% get_latest_posts as [varname] limit [limit] %}
+        {% get_latest_posts for [user] as [varname] %}
         {% get_latest_posts for [user] as [varname] limit [limit] %}
     
     Example usage::
@@ -75,10 +77,11 @@ def get_latest_posts(parser, token):
 #@register.tag
 def get_category_list(parser, token):
     """
-    Gets a list of categories in alphabetical order limited by a limit.
-    The list of categories will be inserted into the template context
-    with a variable containing that value whose name is define by the
-    'as' clause. If limit not supplied, the default of 10 will be used.
+    To get a list of categories you can use the ``get_category_list`` template
+    tag. This tag will return a list of categories in alphabetical order. It
+    will also filter the categories and only use categories where "favorite"
+    is set. Like ``get_latest_posts``, this tag also has a optional limit
+    clause, except the default is 10.
     
     Syntax::
         {% get_category_list as [varname] %}

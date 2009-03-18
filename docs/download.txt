@@ -1,0 +1,44 @@
+.. _download:
+
+.. _Django: http://www.djangoproject.com/
+
+How to get Lithium
+==================
+
+Lithium is available under the BSD license. Lithium requires the latest development `Django`_, or `Django`_ 1.1 once it is finished. Lithium will run on any system that `Django`_ will run on. Lithium requires a patch for `Django`_ that I wrote: http://code.djangoproject.com/ticket/10285
+
+Get the latest development version
+----------------------------------
+
+It is recommended that you use the latest development version, we have not reached version 1.0 yet. Lithium 1.0 is quite far away, until then, you should use the development release.
+
+Via tar.gz / zip archive
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can download the latest version in a archive created directly from the git repository via the following links:
+
+    * tar.gz: http://github.com/kylef/lithium/tarball/master
+    * zip: http://github.com/kylef/lithium/zipball/master
+
+Via git repository
+~~~~~~~~~~~~~~~~~~
+
+Git is one of the best ways to download Lithium, it allows you to easily pull the latest version of Lithium, just by typing ``git pull`` within the lithium directory. It will also allow you to download the complete history of lithium's source code, to download git or how to use it. See: http://git-scm.com/
+
+You can use the following command to clone the git repository:
+
+.. code-block:: bash
+
+    $ git clone git://github.com/kylef/lithium.git
+
+Getting the stable version
+--------------------------
+
+The latest development is actually stable, each change is tested before it is added to the development version. The difference is, that the stable version is a official release. The development version has lots of little changes. Once the amount of changes add up, it creates another stable release. The documentation is for the latest development release, but there are only slight differences. The documentation should apply to both releases.
+
+Via tar.gz / zip archive
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The latest official build can be downloaded via:
+
+    * zip: http://cloud.github.com/downloads/kylef/lithium/lithium-0.2.zip

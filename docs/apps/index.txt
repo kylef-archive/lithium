@@ -1,0 +1,12 @@
+.. _apps-index:
+
+Lithium applications
+====================
+
+Here is a list of the applications which lithium provides.
+
+.. toctree::
+    :maxdepth: 1
+    
+    blog
+    contact

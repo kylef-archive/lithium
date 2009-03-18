@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-{% load markup %}
 
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
 <div class="post">
     <span class="meta">{{ post.pub_date|date:"Y M d" }}</span>
-    {{ post.content|markdown:"safe" }}
+    {{ post.content }}
 </div>
 
 {% if post.enable_comments %}

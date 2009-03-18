@@ -1,0 +1,63 @@
+.. _contact-index:
+
+===================
+Lithium contact app
+===================
+
+.. module:: lithium.contact
+	:synopsis: Lithium contact application
+
+Lithium contact is a simple contact form allowing users of your website to easily contact you via email.
+
+Quick start guide
+=================
+
+To get started using the ``contact`` app, follow these steps:
+
+	#. Install the blog app by adding ``'lithium.contact'`` to
+	   ``INSTALLED_APPS``.
+	
+	#. Add the contact app's URLs to your project's ``urls.py``:
+	
+		.. code-block:: python
+		
+			urlpatterns = patterns('',
+				...
+				url(r'^contact/', include('lithium.contact.urls')),
+				...
+			)
+	
+	#. Add your email address to the ``MANAGERS`` section of ``settings.py``:
+	
+	    .. code-block:: python
+		
+			MANAGERS = (
+				('Kyle Fuller', 'inbox@kylefuller.co.uk'),
+			)
+
+Using your own templates
+========================
+
+There are just two templates, one for the contact form, and another is displayed once the contact form is completed. This displays a confirmation to the user.
+
+``contact/contact_form.html``
+-----------------------------
+
+This template gets passed a ``django.forms.Form`` via the context ``form``. This template should render the form, and display any validation errors if there were any.
+
+Rendering a custom form
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A complete form might look like:
+
+.. code-block:: html+django
+    
+    <form action="{% url contact_form %}" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+
+``contact/contact_confirmation.html``
+-------------------------------------
+
+This template shows a confirmation to the user that there message has been sent.
