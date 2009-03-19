@@ -7,18 +7,19 @@ except ImportError:
 
 from django.db import models
 from django.contrib.sites.models import Site
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from lithium.conf import settings
 from lithium.blog.managers import PostManager, CurrentSitePostManager
 
 class Category(models.Model):
-    title = models.CharField(max_length=100)
-    slug = models.SlugField()
-    favorite = models.BooleanField(default=False)
+    title = models.CharField(_('title'), max_length=100)
+    slug = models.SlugField(_('slug'))
+    favorite = models.BooleanField(_('favorite'), default=False, help_text=_("Wheather this category should be included in category lists."))
     
     class Meta:
-        verbose_name_plural = 'categories'
+        verbose_name_plural = _('categories')
         ordering = ('title',)
     
     def __unicode__(self):
@@ -29,14 +30,14 @@ class Category(models.Model):
     get_absolute_url = models.permalink(get_absolute_url)
 
 class Post(models.Model):
-    title = models.CharField(max_length=255)
-    slug = models.SlugField()
+    title = models.CharField(_('title'), max_length=255)
+    slug = models.SlugField(_('slug'))
     
-    content = models.TextField(blank=True)
+    content = models.TextField(_('content'), blank=True)
     
-    pub_date = models.DateTimeField(default=datetime.datetime.now)
-    is_public = models.BooleanField(default=False)
-    enable_comments = models.BooleanField(default=settings.ENABLE_COMMENTS_BY_DEFAULT)
+    pub_date = models.DateTimeField(_('published date'), default=datetime.datetime.now)
+    is_public = models.BooleanField(_('is public'), default=False)
+    enable_comments = models.BooleanField(_('enable comments'), default=settings.ENABLE_COMMENTS_BY_DEFAULT)
     sites = models.ManyToManyField(Site)
     author = models.ForeignKey(User)
     category = models.ManyToManyField(Category, blank=True)

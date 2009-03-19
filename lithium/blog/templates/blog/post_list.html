@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load blog %}
 
 {% block title %}Post list{% endblock %}
@@ -13,10 +14,10 @@
 {% endfor %}
 
 {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.number|add:"-1" }}">Previous posts</a>
+    <a href="?page={{ page_obj.number|add:"-1" }}">{% trans 'Previous posts' %}</a>
 {% endif %}
 
 {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.number|add:"1" }}">Next posts</a>
+    <a href="?page={{ page_obj.number|add:"1" }}">{% trans 'Next posts' %}</a>
 {% endif %}
 {% endblock %}

@@ -6,10 +6,22 @@ from lithium.blog.models import Post
 
 class LatestPosts(Feed):
     site = Site.objects.get_current()
-    title = '%s feed' % site.name
-    link = '/posts/'
-    description = 'Latest posts at %s' % site.name
     description_template = 'blog/feed_description.html' 
+    
+    def title(self):
+        if not hasattr(self, '_site'):
+            self._site = Site.objects.get_current()
+        return u"%s feed" % self._site.name
+    
+    def link(self):
+        if not hasattr(self, '_site'):
+            self._site = Site.objects.get_current()
+        return "http://%s/" % (self._site.domain)
+    
+    def description(self):
+        if not hasattr(self, '_site'):
+            self._site = Site.objects.get_current()
+        return u"Latest posts at %s" % self._site.name
     
     def item_pubdate(self, item):
         return item.pub_date
