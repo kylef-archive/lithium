@@ -1,0 +1,39 @@
+.. _base-template:
+
+=============
+Base template
+=============
+
+Most of, if not all lithium applications require a ``base.html`` template. The base template is just a master template on which every other template of lithium extends on. Once you have made a base template, the rest of lithium could place itself on-top of your old template very easily.
+
+For Lithium to work, you will need to make a base template, and place it in a template directory of your project and save it as ``base.html``.
+
+An example of a base template:
+
+.. code-block:: html+django
+
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>{% block title %}My Website{% endblock %}</title>
+    </head>
+    
+    <body>
+        <div id="container">
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+            
+            <div id="sidebar">
+                ...
+            </div>
+        </div>
+    </body>
+    </html>
+
+What blocks does Lithium use?
+=============================
+
+Lithium only uses two blocks, title, and content. In the title, it will place the name of a page, the title of it. Inside the content, it will insert the bulk of the page, the information.

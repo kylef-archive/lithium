@@ -5,7 +5,7 @@ Quick install guide
 
 First you will need a working Django installation, then you can follow one of the many steps below to install lithium.
 
-Once you have installed Lithium, look at the documentation for any :ref:`Lithium applications <apps-index>` on how to add it to your Django project.
+Once you have installed Lithium, look at the documentation for any :ref:`Lithium applications <apps-index>` on how to add it to your Django project. You must also create a :ref:`base template (base.html) <base-template>`.
 
 .. note::
 

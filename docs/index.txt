@@ -35,3 +35,8 @@ Getting Help
 If you have any problems with Lithium, or have any suggestions you can contact `kylef`_, or ask in the IRC Channel: #lithium at irc.freenode.org.
 
 .. _kylef: http://kylefuller.co.uk/contact/
+
+Other stuff
+-----------
+
+    * :ref:`Base template (base.html) <base-template>`
