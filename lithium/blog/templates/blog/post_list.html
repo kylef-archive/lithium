@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markup blog %}
+{% load blog %}
 
 {% block title %}Post list{% endblock %}
 
@@ -8,7 +8,7 @@
 <div class="post">
     <span class="meta">{{ post.pub_date|date:"Y M d" }}</span>
     <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-    {{ post.content|markdown:"safe" }}
+    {{ post.content }}
 </div>
 {% endfor %}
 
