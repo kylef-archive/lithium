@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from lithium.conf import settings
-from lithium.blog.managers import PostManager, CurrentSitePostManager
+from lithium.blog.managers import CurrentSitePostManager
 
 class Category(models.Model):
     title = models.CharField(_('title'), max_length=100)
@@ -42,7 +42,7 @@ class Post(models.Model):
     author = models.ForeignKey(User)
     category = models.ManyToManyField(Category, blank=True)
     
-    objects = PostManager()
+    objects = models.Manager()
     on_site = CurrentSitePostManager('sites')
     
     class Meta:
