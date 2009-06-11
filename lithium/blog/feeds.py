@@ -32,8 +32,11 @@ class LatestPosts(Feed):
     def item_author_email(self, item):
         return item.author.email
     
+    def get_query_set(self):
+        return Post.on_site.disallow_future()
+    
     def items(self):
-        return Post.on_site.all()[:settings.BLOG_FEED_ITEMS]
+        return self.get_query_set()[:settings.BLOG_FEED_ITEMS]
 
 class LatestPostsByTag(LatestPosts):
     def get_object(self, tags):
@@ -42,7 +45,7 @@ class LatestPostsByTag(LatestPosts):
         self.tag = tags[0]
     
     def items(self):
-        return Post.on_site.filter(category__slug=self.tag)[:settings.BLOG_FEED_ITEMS]
+        return self.get_query_set().filter(category__slug=self.tag)[:settings.BLOG_FEED_ITEMS]
 
 class LatestPostsByAuthor(LatestPosts):
     def get_object(self, authors):
@@ -51,4 +54,4 @@ class LatestPostsByAuthor(LatestPosts):
         self.author = authors[0]
     
     def items(self):
-        return Post.on_site.filter(author__username=self.author)[:settings.BLOG_FEED_ITEMS]
+        return self.get_query_set().filter(author__username=self.author)[:settings.BLOG_FEED_ITEMS]
