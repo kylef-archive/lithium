@@ -1,9 +1,9 @@
 .. _download:
 
-.. _Django: http://www.djangoproject.com/
-
 How to get Lithium
 ==================
+
+.. _Django: http://www.djangoproject.com/
 
 Lithium is available under the BSD license. Lithium requires the latest development `Django`_, or `Django`_ 1.1 once it is finished. Lithium will run on any system that `Django`_ will run on. Lithium requires a patch for `Django`_ that I wrote: http://code.djangoproject.com/ticket/10285
 
