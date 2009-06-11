@@ -33,9 +33,9 @@ class PostNode(BaseNode):
     
     def render(self, context):
         if self.user:
-            posts = Post.objects.all().filter(author=self.user)[:self.limit]
+            posts = Post.on_site.disallow_future().filter(author=self.user)[:self.limit]
         else:
-            posts = Post.objects.all()[:self.limit]
+            posts = Post.on_site.disallow_future()[:self.limit]
         if posts and (self.limit == 1):
             context[self.as_varname] = posts[0]
         else:
