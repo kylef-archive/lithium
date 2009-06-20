@@ -42,8 +42,8 @@ class Post(models.Model):
     author = models.ForeignKey(User)
     category = models.ManyToManyField(Category, blank=True)
     
-    objects = models.Manager()
     on_site = CurrentSitePostManager('sites')
+    objects = models.Manager()
     
     class Meta:
         ordering = ('-pub_date',)
