@@ -62,10 +62,10 @@ class Post(models.Model):
     get_absolute_url = models.permalink(get_absolute_url)
     
     def get_next_post(self):
-        return self.get_next_by_pub_date(is_public=True, sites=settings.SITE_ID)
+        return self.get_next_by_pub_date()
     
     def get_previous_post(self):
-        return self.get_next_by_previous(is_public=True, sites=settings.SITE_ID)
+        return self.get_previous_by_pub_date()
 
 def ping_post(sender, instance, signal, *args, **kwargs):
     if settings.BLOG_PING:
