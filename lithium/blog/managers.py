@@ -12,4 +12,4 @@ class CurrentSitePostManager(CurrentSiteManager):
             return queryset.filter(is_public=True)
     
     def disallow_future(self):
-        return self.all()(pub_date__lte=datetime.datetime.now())
+        return self.all().filter(pub_date__lte=datetime.datetime.now())
