@@ -17,17 +17,22 @@ detail_dict = {
     'template_object_name': 'post',
 }
 
-urlpatterns = patterns('lithium.views.date_based',
-    url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$', 'object_detail', detail_dict, 'blog.post_detail'),
-    url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'archive_day', list_dict, 'blog.archive_day'),
-    url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'archive_month', list_dict, 'blog.archive_month'),
-    url(r'^(?P<year>\d{4})/$', 'archive_year', list_dict, 'blog.archive_year'),
-    url(r'^$', 'archive_index', list_dict, 'blog.post_list'),
-)
+def _url(regex, view, kwargs=None, name=None):
+    """
+    This is a wrapper around django.conf.urls.defaults.url which swaps the
+    view for our decorator.
+    """
+    return url(regex, 'lithium.blog.views.decorator',
+        dict(view='lithium.views.date_based.'+view, **kwargs), name)
 
-urlpatterns += patterns('lithium.blog.views',
-    url(r'^author/(?P<author>[-\w]+)/?$', 'author_index', list_dict, 'blog.author_detail'),
-    url(r'^tag/(?P<tag>[-\w]+)/$', 'tag_index', list_dict, 'blog.category_detail'),
+urlpatterns = patterns('',
+    _url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$', 'object_detail', detail_dict, 'blog.post_detail'),
+    _url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'archive_day', list_dict, 'blog.archive_day'),
+    _url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'archive_month', list_dict, 'blog.archive_month'),
+    _url(r'^(?P<year>\d{4})/$', 'archive_year', list_dict, 'blog.archive_year'),
+    _url(r'^$', 'archive_index', list_dict, 'blog.post_list'),
+    _url(r'^author/(?P<author>[-\w]+)/?$', 'archive_index', list_dict, 'blog.author_detail'),
+    _url(r'^tag/(?P<tag>[-\w]+)/$', 'archive_index', list_dict, 'blog.category_detail'),
 )
 
 feeds = {

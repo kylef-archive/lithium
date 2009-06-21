@@ -16,7 +16,7 @@ from lithium.blog.managers import CurrentSitePostManager
 class Category(models.Model):
     title = models.CharField(_('title'), max_length=100)
     slug = models.SlugField(_('slug'))
-    favorite = models.BooleanField(_('favorite'), default=False, help_text=_("Wheather this category should be included in category lists."))
+    favorite = models.BooleanField(_('favorite'), default=False, help_text=_("Whether this category should be included in category lists."))
     
     class Meta:
         verbose_name_plural = _('categories')
@@ -47,6 +47,7 @@ class Post(models.Model):
     
     class Meta:
         ordering = ('-pub_date',)
+        permissions = (('can_read_private', 'Can read private posts'),)
     
     def __unicode__(self):
         return self.title

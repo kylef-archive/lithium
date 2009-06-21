@@ -1,9 +1,19 @@
-from lithium.views.date_based import archive_index
+from django.core.urlresolvers import get_callable
+from lithium.blog.models import Post
 
-def author_index(request, author, *args, **kwargs):
-    kwargs['queryset'] = kwargs['queryset'].filter(author__username=author)
-    return archive_index(request, *args, **kwargs)
-
-def tag_index(request, tag, *args, **kwargs):
-    kwargs['queryset'] = kwargs['queryset'].filter(category__slug=tag)
-    return archive_index(request, *args, **kwargs)
+def decorator(request, view, author=None, tag=None, *args, **kwargs):
+    """
+    A view decotator to change the queryset depending on whether
+    a user may read private posts.
+    """
+    
+    if request.user.has_perm('blog.can_read_private'):
+        kwargs['queryset'] = Post.on_site.all(allow_private=True)
+    
+    if author:
+        kwargs['queryset'] = kwargs['queryset'].filter(author__username=author)
+    
+    if tag:
+        kwargs['queryset'] = kwargs['queryset'].filter(category__slug=tag)
+    
+    return get_callable(view)(request, *args, **kwargs)
