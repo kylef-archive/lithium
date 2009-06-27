@@ -1,8 +1,12 @@
 import datetime
 
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+
+from lithium.conf import settings
+from lithium.wiki.utils import title
 
 PAGE_PERMISSIONS = (
     (0, 'Use global setting'),
@@ -12,21 +16,45 @@ PAGE_PERMISSIONS = (
 )
 
 class Page(models.Model):
-    title = models.CharField(_('title'), max_length=255)
+    title = models.CharField(_('title'), max_length=255, blank=True)
     slug = models.SlugField(_('slug'))
     permission = models.IntegerField(_('permission'), choices=PAGE_PERMISSIONS, help_text=_('Who can edit this page.'), default=0)
     
     def __unicode__(self):
         return self.title
     
+    #@models.permalink
+    def get_absolute_url(self):
+        return ('wiki.page_detail', None, {'slug': self.slug})
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    #@models.permalink
+    def get_edit_url(self):
+        return ('wiki.page_edit', None, {'slug': self.slug})
+    get_edit_url = models.permalink(get_edit_url)
+    
+    def user_can_edit(self, user):
+        permission = self.permission or settings.WIKI_DEFAULT_USER_PERMISSION
+        user_perm = int(not user.is_anonymous()) + 1
+        if user.is_superuser:
+            user_perm = 3
+        
+        return user_perm >= permission
+    
     #@property
     def revision(self):
-        return self.revision_set.latest('pub_date')
+        try:
+            return self.revision_set.latest('pub_date')
+        except ObjectDoesNotExist:
+            return None
     revision = property(revision)
     
     #@property
     def content(self):
-        return self.revision.content
+        if self.revision:
+            return self.revision.content
+        else:
+            return ''
     content = property(content)
 
 class Revision(models.Model):
@@ -43,6 +71,16 @@ class Revision(models.Model):
     
     def __unicode__(self):
         return u'%s' % self.pk
+    
+    #@models.permalink
+    def get_absolute_url(self):
+        return ('wiki.revision_detail', None, {'slug': self.page.slug, 'pk': self.pk})
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    #@property
+    def title(self):
+        return self.page.title
+    title = property(title)
     
     #@property
     def content(self):

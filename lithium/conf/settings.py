@@ -17,3 +17,6 @@ BLOG_PING_SERVERS = getattr(settings, 'BLOG_PING_SERVERS', (
     'http://ping.feedburner.com',
 ))
 BLOG_FEED_ITEMS = getattr(settings, 'BLOG_FEED_ITEMS', 20)
+
+# lithium.wiki
+WIKI_DEFAULT_USER_PERMISSION = getattr(settings, 'WIKI_DEFAULT_USER_PERMISSION', 1)
