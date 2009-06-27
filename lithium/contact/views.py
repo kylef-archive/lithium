@@ -9,14 +9,7 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            recipients = []
-            
-            if settings.MANAGERS:
-                for manager in settings.MANAGERS:
-                    recipients.append(manager[1])
-            
-            form.save(recipients)
-            
+            form.save([manager[1] for manager in settings.MANAGERS])
             return HttpResponseRedirect(reverse('contact_confirmation'))
     else:
         form = ContactForm()

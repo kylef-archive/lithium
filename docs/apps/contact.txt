@@ -38,7 +38,15 @@ To get started using the ``contact`` app, follow these steps:
 Using your own templates
 ========================
 
-There are just two templates, one for the contact form, and another is displayed once the contact form is completed. This displays a confirmation to the user.
+``contact/contact_email.txt``
+-----------------------------
+
+This template is used to render the email before it is sent. The template context will contain the following:
+
+- ``sender``: The sender's email address.
+- ``subject``: The sender's subject.
+- ``message``: The sender's message.
+- ``recipients``: This is a list of who the email is being sent to.
 
 ``contact/contact_form.html``
 -----------------------------
