@@ -77,6 +77,11 @@ class Revision(models.Model):
         return ('wiki.revision_detail', None, {'slug': self.page.slug, 'pk': self.pk})
     get_absolute_url = models.permalink(get_absolute_url)
     
+    #@models.permalink
+    def get_revert_url(self):
+        return ('wiki.revision_revert', None, {'slug': self.page.slug, 'pk': self.pk})
+    get_revert_url = models.permalink(get_revert_url)
+    
     #@property
     def title(self):
         return self.page.title

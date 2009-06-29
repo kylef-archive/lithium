@@ -91,6 +91,30 @@ def revision_detail(request, slug, pk):
     
     return render_to_response('wiki/revision_detail.html', {'revision': revision,}, RequestContext(request))
 
+def revision_revert(request, slug, pk):
+    try:
+        revision = Revision.objects.filter(page__slug=slug, pk=pk).get()
+    except ObjectDoesNotExist:
+        raise Http404, "No revision found matching the query"
+    
+    if not revision.page.user_can_edit(request.user):
+        if request.user.is_anonymous():
+            return HttpResponseRedirect('%s?%s=%s' % (settings.LOGIN_URL, REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
+        else:
+            return render_to_response('wiki/permission_denied.html', context_instance=RequestContext(request))
+    
+    r = Revision(text=revision.text, page=revision.page)
+    r.comment = _(u'Reverted to revision %(revision)s by %(author)s') % {'revision':revision.pk, 'author':revision.author or revision.author_ip}
+    
+    if request.user.is_anonymous():
+        r.author_ip = request.META['REMOTE_ADDR']
+    else:
+        r.author = request.user
+    
+    r.save()
+    
+    return HttpResponseRedirect(r.get_absolute_url())
+
 def revision_diff(request, slug):
     if request.GET.get('a').isdigit() and request.GET.get('b').isdigit():
         a = int(request.GET.get('a'))
