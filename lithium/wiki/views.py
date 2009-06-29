@@ -22,6 +22,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.views.generic.list_detail import object_list
 from django.utils.translation import ugettext_lazy as _
 
+from lithium.conf import settings
 from lithium.wiki.models import Page, Revision
 from lithium.wiki.forms import EditForm
 from lithium.wiki.utils import title
@@ -78,7 +79,7 @@ def page_history(request, slug, **kwargs):
     kwargs['extra_context'] = {'page': page}
     kwargs['template_name'] = 'wiki/page_history.html'
     kwargs['template_object_name'] = 'revision'
-    kwargs['paginate_by'] = 50
+    kwargs['paginate_by'] = settings.WIKI_HISTORY_PAGINATE_BY
     
     return object_list(request, **kwargs)
 

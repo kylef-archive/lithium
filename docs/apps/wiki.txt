@@ -1,0 +1,94 @@
+.. _wiki-index:
+
+================
+Lithium wiki app
+================
+
+.. module:: lithium.wiki
+	:synopsis: Lithium wiki application
+
+Quick start guide
+=================
+
+To get started using the ``wiki`` app, follow these steps:
+
+	#. Install the wiki app by adding ``'lithium.wiki'`` to
+	   ``INSTALLED_APPS``.
+	
+	#. Run ``manage.py syncdb`` so that Django will create the wiki tables.
+	
+	#. Add the wiki app's URLs to your project's ``urls.py``:
+	
+		.. code-block:: python
+		
+			urlpatterns = patterns('',
+				...
+				url(r'^wiki/', include('lithium.wiki.urls')),
+				...
+			)
+
+Settings
+========
+
+Some of the application's behavior can be configured by adding the appropriate settings to your project's settings file.
+
+``WIKI_DEFAULT_USER_PERMISSION``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default: 1
+
+This is the default permission required for a page. You can override this per page inside the administration panel. The values are: 1, 2, 3. 1 allows a anonymous user to edit a page, 2 allows a user with an account to edit a page, and 3 only allows superusers to edit a page.
+
+``WIKI_HISTORY_PAGINATE_BY``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Default: 50
+
+This is the amount of revisions per page on the page history.
+
+Templates
+=========
+
+``wiki/page_detail.html``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template will get passed a ``Page`` in the template context ``page``.
+
+``wiki/page_discuss.html``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template works the same as ``wiki/page_detail.html``, but it uses ``django.contrib.comments`` to add discussion to a page.
+
+``wiki/page_edit.html``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This template get's passed a page, and a EditForm.
+
+``wiki/page_history.html``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template will get passed:
+
+- ``page``: The page which the revisions belong too.
+- ``revision_list``: The list of revisions, this can be iterated over to display each Revision within.
+- ``is_paginated``: A boolean representing whether the results are paginated. Specifically, this is set to False if the number of revisions is less than or equal to paginate_by.
+
+If the results are paginated, the context will contain these extra variables:
+
+- ``paginator``: An instance of ``django.core.paginator.Paginator``.
+- ``page_obj``: An instance of ``django.core.paginator.Page``.
+
+``wiki/revision_detail.html``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template will get passed a ``Revision`` in the template context ``revision``.
+
+``wiki/revision_diff.html``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This template will get passed:
+
+- ``page``: The page to which each of these revisions belong to.
+- ``revisionA``: The first revision.
+- ``revisionB``: The second revision.
+- ``difftext``: The HTML difftext.

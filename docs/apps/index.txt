@@ -10,3 +10,4 @@ Here is a list of the applications which lithium provides.
     
     blog
     contact
+    wiki
