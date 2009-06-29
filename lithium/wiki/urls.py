@@ -5,5 +5,8 @@ urlpatterns = patterns('lithium.wiki.views',
     url(r'^$', 'page_detail', dict(slug='Start'), 'wiki.page_detail'),
     url(r'^(?P<slug>[-\w]+)/$', 'page_detail', name='wiki.page_detail'),
     url(r'^(?P<slug>[-\w]+)/edit/$', 'page_edit', name='wiki.page_edit'),
+    url(r'^(?P<slug>[-\w]+)/history/$', 'page_history', name='wiki.page_history'),
+    url(r'^(?P<slug>[-\w]+)/discuss/$', 'page_discuss', name='wiki.page_discuss'),
     url(r'^(?P<slug>[-\w]+)/(?P<pk>[\d]+)/$', 'revision_detail', name='wiki.revision_detail'),
+    url(r'^(?P<slug>[-\w]+)/diff$', 'revision_diff', name='wiki.revision_diff'),
 )

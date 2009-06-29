@@ -4,11 +4,12 @@
 {% block title %}{{ page.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ page.title }}</h2>
-<a href="{{ page.get_edit_url }}">{% trans 'Edit' %} {{ page.title }}</a>
+<h2>{% trans 'Discussion on' %} {{ page.title }}</h2>
 
 {% if page_exists %}
-  <p>{{ page.content }}</p>
+    {% load comments %}
+    {% render_comment_list for page %}
+    {% render_comment_form for page %}
 {% else %}
   <p>{% trans 'This page does not exist. To create this page please click' %} <a href="{{ page.get_edit_url }}">{% trans 'here' %}</a>.</p>
 {% endif %}

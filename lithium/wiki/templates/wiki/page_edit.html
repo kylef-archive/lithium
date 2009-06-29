@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}{{ page.title }}{% endblock %}
+
 {% block content %}
 <h2><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></h2>
 

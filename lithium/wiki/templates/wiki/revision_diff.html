@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans 'Revision' %} {{ revisionA }} / {% trans 'Revision' %} {{ revisionB }}{% endblock %}
+
+{% block content %}
+<h2><a href="{{ page.get_absolute_url }}">{{ page.title }}</h2>
+<a href="{{ page.get_edit_url }}">{% trans 'Edit' %} {{ page.title }}</a>
+
+{{ difftext|safe }}
+{% endblock %}

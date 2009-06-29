@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}{{ revision.title }}{% endblock %}
 
 {% block content %}
 <h2>{{ revision.title }}</h2>
 <p>{{ revision.content }}</p>
+<p>{% trans 'Revision by' %} {% if revision.author %}<a href="{{ revision.author.get_absolute_url }}">{{ revision.author }}</a>{% else %}{{ revision.author_ip }}{% endif %} at {{ revision.pub_date }}</p>
 {% endblock %}
