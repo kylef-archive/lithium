@@ -5,8 +5,6 @@
 {% block title %}{% trans 'Revision' %} {{ revisionA }} / {% trans 'Revision' %} {{ revisionB }}{% endblock %}
 
 {% block content %}
-<h2><a href="{{ page.get_absolute_url }}">{{ page.title }}</h2>
-<a href="{{ page.get_edit_url }}">{% trans 'Edit' %} {{ page.title }}</a>
-
+<h2><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></h2>
 {{ difftext|safe }}
 {% endblock %}

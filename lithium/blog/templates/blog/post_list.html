@@ -7,17 +7,17 @@
 {% block content %}
 {% for post in post_list %}
 <div class="post">
-    <span class="meta">{{ post.pub_date|date:"Y M d" }}</span>
-    <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-    {{ post.content }}
+    <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+    <p>{{ post.content }}</p>
+    <p class="note">{% trans 'Posted on' %} {{ post.pub_date|date:"Y M d" }} {% trans 'by' %} {{ post.author }}</p>
 </div>
 {% endfor %}
 
 {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.number|add:"-1" }}">{% trans 'Previous posts' %}</a>
+    <a href="?page={{ page_obj.number|add:"-1" }}" class="pagination">{% trans 'Previous posts' %}</a>
 {% endif %}
 
 {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.number|add:"1" }}">{% trans 'Next posts' %}</a>
+    <a href="?page={{ page_obj.number|add:"1" }}" class="pagination">{% trans 'Next posts' %}</a>
 {% endif %}
 {% endblock %}

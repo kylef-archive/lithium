@@ -4,12 +4,12 @@
 {% block title %}{% trans 'History for' %} {{ page.title }}{% endblock %}
 
 {% block content %}
-<h2>{% trans 'History for' %} {{ page.title }}</h2>
+<h2>{% trans 'History for' %} <a href="{{ page.get_absolute_url }}">{{ page.title }}</a></h2>
 
 <form method="get" id="diffform" action="{{ page.get_absolute_url }}diff">
 <ul>
 {% for revision in revision_list %}
-    <li><a href="{{ revision.get_absolute_url }}">{{ revision.comment }}</a> {% trans 'by' %} {{ revision.author }} (<a href="{{ revision.get_revert_url }}">revert</a>) <input type="radio" name="a" value="{{ revision.pk }}" {% ifequal revision page.revision %}checked="checked"{% endifequal %} /><input type="radio" name="b" value="{{ revision.pk }}" {% ifequal revision page.revision %}checked="checked"{% endifequal %} /></li>
+    <li><a href="{{ revision.get_absolute_url }}">{% if revision.comment %}{{ revision.comment }}{% else %}{{ revision.pk }}{% endif %}</a> {% trans 'by' %} {% if revision.author %}<a href="{{ revision.author.get_absolute_url }}">{{ revision.author }}</a>{% else %}{{ revision.author_ip }}{% endif %} (<a href="{{ revision.get_revert_url }}">revert</a>) <input type="radio" name="a" value="{{ revision.pk }}" {% ifequal revision page.revision %}checked="checked"{% endifequal %} /><input type="radio" name="b" value="{{ revision.pk }}" {% ifequal revision page.revision %}checked="checked"{% endifequal %} />
 {% endfor %}
 </ul>
 <input type="submit" value="{% trans 'Compare' %}"/>
