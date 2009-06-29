@@ -8,6 +8,7 @@ def decorator(request, view, author=None, tag=None, *args, **kwargs):
     
     if request.user.has_perm('blog.can_read_private'):
         kwargs['queryset'] = Post.on_site.all(allow_private=True)
+        kwargs['allow_future'] = True
     
     if author:
         kwargs['queryset'] = kwargs['queryset'].filter(author__username=author)
