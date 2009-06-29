@@ -4,12 +4,17 @@
 {% block title %}{{ page.title }}{% endblock %}
 
 {% block content %}
+<p class="note"><a href="{{ page.get_edit_url }}">{% trans 'Edit' %} {{ page.title }}</a> | <a href="{{ page.get_history_url }}">{% trans 'History of' %} {{ page.title }}</a> | <a href="{{ page.get_discuss_url }}">{% trans 'Discuss ' %} {{ page.title }}</a></p>
+
 <h2>{{ page.title }}</h2>
-<a href="{{ page.get_edit_url }}">{% trans 'Edit' %} {{ page.title }}</a>
 
 {% if page_exists %}
   <p>{{ page.content }}</p>
 {% else %}
   <p>{% trans 'This page does not exist. To create this page please click' %} <a href="{{ page.get_edit_url }}">{% trans 'here' %}</a>.</p>
 {% endif %}
+
+{% ifequal page.content|length 2296 %}
+<p class="note"><a href="{{ page.get_edit_url }}">{% trans 'Edit' %} {{ page.title }}</a> | <a href="{{ page.get_history_url }}">{% trans 'History of' %} {{ page.title }}</a> | <a href="{{ page.get_discuss_url }}">{% trans 'Discuss ' %} {{ page.title }}</a></p>
+{% endifequal %}
 {% endblock %}

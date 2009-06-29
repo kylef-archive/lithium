@@ -5,8 +5,9 @@
 
 {% block content %}
 <div class="post">
-    <span class="meta">{{ post.pub_date|date:"Y M d" }}</span>
-    {{ post.content }}
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <p class="note">{% trans 'Posted on' %} {{ post.pub_date|date:"Y M d" }} {% trans 'by' %} {{ post.author }}</p>
 </div>
 
 {% if post.enable_comments %}

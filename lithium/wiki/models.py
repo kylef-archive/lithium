@@ -33,6 +33,16 @@ class Page(models.Model):
         return ('wiki.page_edit', None, {'slug': self.slug})
     get_edit_url = models.permalink(get_edit_url)
     
+    #@models.permalink
+    def get_discuss_url(self):
+        return ('wiki.page_discuss', None, {'slug': self.slug})
+    get_discuss_url = models.permalink(get_discuss_url)
+    
+    #@models.permalink
+    def get_history_url(self):
+        return ('wiki.page_history', None, {'slug': self.slug})
+    get_history_url = models.permalink(get_history_url)
+    
     def user_can_edit(self, user):
         permission = self.permission or settings.WIKI_DEFAULT_USER_PERMISSION
         user_perm = int(not user.is_anonymous()) + 1

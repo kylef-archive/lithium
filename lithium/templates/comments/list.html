@@ -1,0 +1,6 @@
+{% for comment in comment_list %}
+    <div class="comment {% cycle 'odd' 'even' %}{% if comment.user.is_staff %} staff{% endif %}">
+        <h4><a class="count" name="c{{ comment.id }}" href="#c{{ comment.id }}" title="Permalink to {{ comment.user }}'s comment" style="background-image: url({#% get_avatar_for_comment comment 40 %#});">{{ comment.name }}</a></h4>
+        <p>{{ comment.comment }}</p>
+    </div>
+{% endfor %}

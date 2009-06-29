@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
+<h2>{% trans "Contact" %}</h2>
 <form action="{% url contact_form %}" method="POST">
     {{ form.as_p }}
     <input type="submit" value="Submit" />
