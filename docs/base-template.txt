@@ -4,11 +4,29 @@
 Base template
 =============
 
-Most of, if not all lithium applications require a ``base.html`` template. The base template is just a master template on which every other template of lithium extends on. Once you have made a base template, the rest of lithium could place itself on-top of your old template very easily.
+Most of, if not all lithium applications require a ``base.html`` template. The base template is just a master template on which every other template of lithium extends on. You can either use the provided templates, or write your own.
 
-For Lithium to work, you will need to make a base template, and place it in a template directory of your project and save it as ``base.html``.
+Using the default templates
+---------------------------
 
-An example of a base template:
+To use the default templates follow these steps:
+
+	#. Paste ``from lithium import templates_path`` into your ``settings.py`` file.
+	
+	#. Add ``templates_path()`` to the ``TEMPLATE_DIRS`` section.
+	
+		.. code-block:: python
+		
+			TEMPLATE_DIRS = (
+			    templates_path(),
+			)
+
+Writing your own base.html template
+-----------------------------------
+
+You will need to create a file called ``base.html`` and place it inside a TEMPLATE_DIR.
+
+An example of a base.html template:
 
 .. code-block:: html+django
 
