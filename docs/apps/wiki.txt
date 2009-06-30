@@ -37,7 +37,12 @@ Some of the application's behavior can be configured by adding the appropriate s
 
 Default: 1
 
-This is the default permission required for a page. You can override this per page inside the administration panel. The values are: 1, 2, 3. 1 allows a anonymous user to edit a page, 2 allows a user with an account to edit a page, and 3 only allows superusers to edit a page.
+This is the default permission required for a page. You can override this per page inside the administration panel. Here are a list of permissions you can use:
+
+- 1 = Anonymous (Anonymouse, User, Staff and Superuser may edit)
+- 2 = User (User, Staff and Superuser may edit)
+- 3 = Staff (Staff and Superuser may edit)
+- 4 = Superuser (Only superusers may edit a page)
 
 ``WIKI_HISTORY_PAGINATE_BY``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

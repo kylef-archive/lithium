@@ -12,7 +12,8 @@ PAGE_PERMISSIONS = (
     (0, 'Use global setting'),
     (1, 'Anonymous'),
     (2, 'User'),
-    (3, 'Superuser'),
+    (3, 'Staff'),
+    (4, 'Superuser'),
 )
 
 class Page(models.Model):
@@ -46,8 +47,12 @@ class Page(models.Model):
     def user_can_edit(self, user):
         permission = self.permission or settings.WIKI_DEFAULT_USER_PERMISSION
         user_perm = int(not user.is_anonymous()) + 1
+        
+        if user.is_staff:
+            user_perm = 4
+        
         if user.is_superuser:
-            user_perm = 3
+            user_perm = 4
         
         return user_perm >= permission
     
