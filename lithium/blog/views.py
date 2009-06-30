@@ -1,4 +1,3 @@
-from django.core.urlresolvers import get_callable
 from lithium.blog.models import Post
 
 def decorator(request, view, author=None, tag=None, *args, **kwargs):
@@ -16,4 +15,4 @@ def decorator(request, view, author=None, tag=None, *args, **kwargs):
     if tag:
         kwargs['queryset'] = kwargs['queryset'].filter(category__slug=tag)
     
-    return get_callable(view)(request, *args, **kwargs)
+    return view(request, *args, **kwargs)
