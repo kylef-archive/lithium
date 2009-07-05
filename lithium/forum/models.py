@@ -1,8 +1,11 @@
+import datetime
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 
-from lithium.forum.managers import ForumManager
+from lithium.forum.managers import ForumManager, ThreadManager
 
 class Forum(models.Model):
     """
@@ -29,9 +32,11 @@ class Forum(models.Model):
     >>> Forum.objects.all()[0].position
     1
     """
+    
     title = models.CharField(_('title'), max_length=255)
     slug = models.SlugField(_('slug'))
     description = models.TextField(_('description'), blank=True)
+    is_category = models.BooleanField(_('is category'), default=False, help_text=_('categories cannot contain threads/posts'))
     
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     position = models.PositiveIntegerField(_('position'), editable=False, default=0)
@@ -92,3 +97,61 @@ class Forum(models.Model):
         super(Forum, self).delete(*args, **kwargs)
         
         Forum.objects.update_position(position, increment=False)
+
+class Thread(models.Model):
+    """
+    # Looup a forum from earlier
+    >>> f = Forum.objects.all()[0]
+    
+    # Create a thread
+    >>> t = Thread.objects.create(forum=f, title='Thread One', slug='thread-one')
+    >>> t.save()
+    
+    # Create a post
+    >>> Post.objects.create(thread=t, content='test').save()
+    
+    # Create another thread
+    >>> t2 = Thread.objects.create(forum=f, title='Thread Two', slug='thread-two')
+    >>> t2.save()
+    
+    # Create a post in this new thread
+    >>> Post.objects.create(thread=t2, content='test').save()
+    
+    # There are now two threads in the forum
+    >>> Forum.objects.all()[0].thread_count
+    2
+    
+    # The threads are in the correct order
+    >>> Thread.objects.all()
+    [<Thread: Thread Two>, <Thread: Thread One>]
+    
+    # Create a new post (moving the old thread infront of the new thread)
+    >>> Post.objects.create(thread=t, content='test2').save()
+    >>> Thread.objects.all()
+    [<Thread: Thread One>, <Thread: Thread Two>]
+    """
+    forum = models.ForeignKey(Forum)
+    
+    title = models.CharField(_('title'), max_length=255)
+    slug = models.SlugField(_('slug'))
+    
+    is_sticky = models.BooleanField(_('is sticky'), default=False)
+    is_locked = models.BooleanField(_('is locked'), default=False)
+    
+    objects = ThreadManager()
+    
+    def __unicode__(self):
+        return self.title
+
+class Post(models.Model):
+    content = models.TextField(_('content'))
+    
+    thread = models.ForeignKey(Thread)
+    author = models.ForeignKey(User, related_name='forum_post_set', null=True, blank=True)
+    pub_date = models.DateTimeField(_('published date'), default=datetime.datetime.now)
+    
+    class Meta:
+        ordering = ('pub_date',)
+    
+    def __unicode__(self):
+        return u'%s' % self.content[:20]
