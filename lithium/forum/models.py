@@ -8,31 +8,6 @@ from django.contrib.auth.models import User
 from lithium.forum.managers import ForumManager, ThreadManager
 
 class Forum(models.Model):
-    """
-    # Create some forums
-    >>> public = Forum.objects.create(title='Public', slug='public')
-    >>> private = Forum.objects.create(title='Private', slug='private')
-    
-    # Create some sub-forums
-    >>> sub1 = Forum.objects.create(title='Sub Public 1', slug='sub-public-1', parent=public)
-    >>> sub2 = Forum.objects.create(title='Sub Public 2', slug='sub-public-2', parent=public)
-    
-    # They're all in order
-    >>> Forum.objects.all()
-    [<Forum: Public>, <Forum: Sub Public 1>, <Forum: Sub Public 2>, <Forum: Private>]
-    
-    # Delete a forum
-    >>> public.delete()
-    
-    # All sub-forums we're also deleted.
-    >>> Forum.objects.all()
-    [<Forum: Private>]
-    
-    # Check the position is 1
-    >>> Forum.objects.all()[0].position
-    1
-    """
-    
     title = models.CharField(_('title'), max_length=255)
     slug = models.SlugField(_('slug'))
     description = models.TextField(_('description'), blank=True)
@@ -158,37 +133,6 @@ class Forum(models.Model):
         return True
 
 class Thread(models.Model):
-    """
-    # Looup a forum from earlier
-    >>> f = Forum.objects.all()[0]
-    
-    # Create a thread
-    >>> t = Thread.objects.create(forum=f, title='Thread One', slug='thread-one')
-    >>> t.save()
-    
-    # Create a post
-    >>> Post.objects.create(thread=t, content='test').save()
-    
-    # Create another thread
-    >>> t2 = Thread.objects.create(forum=f, title='Thread Two', slug='thread-two')
-    >>> t2.save()
-    
-    # Create a post in this new thread
-    >>> Post.objects.create(thread=t2, content='test').save()
-    
-    # There are now two threads in the forum
-    >>> Forum.objects.all()[0].thread_count
-    2
-    
-    # The threads are in the correct order
-    >>> Thread.objects.all()
-    [<Thread: Thread Two>, <Thread: Thread One>]
-    
-    # Create a new post (moving the old thread infront of the new thread)
-    >>> Post.objects.create(thread=t, content='test2').save()
-    >>> Thread.objects.all()
-    [<Thread: Thread One>, <Thread: Thread Two>]
-    """
     forum = models.ForeignKey(Forum)
     
     title = models.CharField(_('title'), max_length=255)
