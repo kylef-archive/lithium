@@ -72,4 +72,4 @@ class ThreadManager(models.Manager):
         return qs.extra(select={
             'post_count': post_count_query,
             'last_post_date': last_post_time_query,
-        }).order_by('-last_post_date')
+        }, order_by=['-is_sticky', '-last_post_date'])

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n forum %}
+
+{% block content %}
+<h2><a href="{{ thread.get_absolute_url }}">{{ thread }}</a></h2>
+
+{% if thread.is_locked %}
+<p>This thread is locked!<p>
+{% endif %}
+
+{% if form %}
+{% render_reply_form thread form %}
+{% endif %}
+{% endblock %}

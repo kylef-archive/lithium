@@ -21,3 +21,7 @@ BLOG_FEED_ITEMS = getattr(settings, 'BLOG_FEED_ITEMS', 20)
 # lithium.wiki
 WIKI_DEFAULT_USER_PERMISSION = getattr(settings, 'WIKI_DEFAULT_USER_PERMISSION', 1)
 WIKI_HISTORY_PAGINATE_BY = getattr(settings, 'WIKI_HISTORY_PAGINATE_BY', 50)
+
+# lithium.forum
+FORUM_THREAD_PAGINATE_BY = getattr(settings, 'FORUM_THREAD_PAGINATE_BY', 40)
+FORUM_POST_PAGINATE_BY = getattr(settings, 'FORUM_POST_PAGINATE_BY', 20)

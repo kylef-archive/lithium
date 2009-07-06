@@ -1,15 +1,21 @@
 import datetime
+from random import choice
 
-from django.db import models
+from django.db import models, IntegrityError
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 
 from lithium.forum.managers import ForumManager, ThreadManager
 
+t = 'abcdefghijkmnopqrstuvwwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ1234567890'
+def generate_extra_id(length=4):
+    return ''.join([random.choice(t) for i in range(length)])
+
 class Forum(models.Model):
     title = models.CharField(_('title'), max_length=255)
-    slug = models.SlugField(_('slug'))
+    slug = models.SlugField(_('slug'), unique=True)
     description = models.TextField(_('description'), blank=True)
     is_category = models.BooleanField(_('is category'), default=False, help_text=_('Categories cannot contain threads/posts'))
     
@@ -131,6 +137,37 @@ class Forum(models.Model):
         Forum.objects.update_position(base, addition, False)
         
         return True
+    
+    #@models.permalink
+    def get_absolute_url(self):
+        return ('forum.forum_detail', None, {'forum': self.slug})
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    #@models.permalink
+    def get_create_thread_url(self):
+        return ('forum.thread_create', None, {'forum': self.slug})
+    get_create_thread_url = models.permalink(get_create_thread_url)
+    
+    def has_children(self):
+        return self.children.count() > 0
+    
+    def latest_thread(self):
+        try:
+            return self.thread_set.all()[0]
+        except IndexError:
+            return None
+    
+    def get_parent_list(self):
+        forum = self
+        parent_list = []
+        
+        while forum:
+            parent_list.append(forum)
+            forum = forum.parent
+        
+        parent_list.reverse()
+        
+        return parent_list
 
 class Thread(models.Model):
     forum = models.ForeignKey(Forum)
@@ -143,8 +180,36 @@ class Thread(models.Model):
     
     objects = ThreadManager()
     
+    class Meta:
+        unique_together = ('forum', 'slug'),
+    
     def __unicode__(self):
         return self.title
+    
+    def save(self, *args, **kwargs):
+        if self.slug == '':
+            self.slug = slugify(self.title)
+        
+        try:
+            super(Thread, self).save(*args, **kwargs)
+        except IntegrityError:
+            self.slug = '%s-%s' % (self.slug, generate_extra_id())
+            self.save(*args, **kwargs)
+    
+    #@models.permalink
+    def get_absolute_url(self):
+        return ('forum.thread_detail', None, {'forum': self.forum.slug, 'slug': self.slug})
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    #@models.permalink
+    def get_reply_url(self):
+        return ('forum.thread_reply', None, {'forum': self.forum.slug, 'slug': self.slug})
+    get_reply_url = models.permalink(get_reply_url)
+    
+    def get_parent_list(self):
+        parent_list = self.forum.get_parent_list()
+        parent_list.append(self)
+        return parent_list
 
 class Post(models.Model):
     content = models.TextField(_('content'))
@@ -158,3 +223,6 @@ class Post(models.Model):
     
     def __unicode__(self):
         return u'%s' % self.content[:20]
+    
+    def get_absolute_url(self):
+        return '%s#%d' % (self.thread.get_absolute_url(), self.pk)
