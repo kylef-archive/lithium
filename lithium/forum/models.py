@@ -36,7 +36,7 @@ class Forum(models.Model):
     title = models.CharField(_('title'), max_length=255)
     slug = models.SlugField(_('slug'))
     description = models.TextField(_('description'), blank=True)
-    is_category = models.BooleanField(_('is category'), default=False, help_text=_('categories cannot contain threads/posts'))
+    is_category = models.BooleanField(_('is category'), default=False, help_text=_('Categories cannot contain threads/posts'))
     
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     position = models.PositiveIntegerField(_('position'), editable=False, default=0)
