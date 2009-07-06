@@ -9,7 +9,7 @@ from lithium.forum.models import Forum, Thread, Post
 
 class ForumAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ['title']}
-    list_display = ('title_link', 'expand', 'add_child')
+    list_display = ('title_link', 'expand', 'add_child', 'position_link')
     
     def queryset(self, request):
         qs = super(ForumAdmin, self).queryset(request)
@@ -18,6 +18,32 @@ class ForumAdmin(admin.ModelAdmin):
             return qs.filter(parent=None)
         
         return qs
+    
+    def get_urls(self):
+        urls = super(ForumAdmin, self).get_urls()
+        
+        new_urls = patterns('',
+            url(r'^move/', self.admin_site.admin_view(self.move), name='admin.forum_move'),
+        )
+    
+        return new_urls + urls
+    
+    def move(self, request):
+        """
+        Move a forum up or down in position.
+        """
+        pk = request.GET.get('f', None)
+        direction = request.GET.get('d', None)
+        
+        if pk:
+            forum = get_object_or_404(Forum, pk=pk)
+            print forum.move(direction)
+            
+            if forum.parent:
+                return HttpResponseRedirect('/admin/forum/forum/?parent=%d' % forum.parent.pk)
+            return HttpResponseRedirect('/admin/forum/forum/')
+        
+        return HttpResponseNotFound()
     
     def title_link(self, obj):
         """
@@ -39,6 +65,16 @@ class ForumAdmin(admin.ModelAdmin):
         return '<a href="add/?parent=%d">+</a>' % obj.id
     add_child.allow_tags = True
     add_child.short_description = 'Add sub-forum'
+    
+    def position_link(self, obj):
+        url = reverse('admin.forum_move')
+        up = url + '?f=%s&d=%s' % (obj.pk, 'up')
+        down = url + '?f=%s&d=%s' % (obj.pk, 'down')
+        
+        return '<a href="%s" class="up">+</a> <a href="%s" class="down">-</a>' % (up, down)
+    position_link.admin_order_field = 'position'
+    position_link.allow_tags = True
+    position_link.short_description = 'Move'
 
 class PostAdmin(admin.StackedInline):
     model = Post

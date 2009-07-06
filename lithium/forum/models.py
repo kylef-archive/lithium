@@ -97,6 +97,65 @@ class Forum(models.Model):
         super(Forum, self).delete(*args, **kwargs)
         
         Forum.objects.update_position(position, increment=False)
+    
+    def get_next_forum(self):
+        try:
+            return self.siblings().filter(position__gt=self.position).order_by('position')[0]
+        except IndexError:
+            return None
+    
+    def get_previous_forum(self):
+        try:
+            return self.siblings().filter(position__lt=self.position).order_by('-position')[0]
+        except IndexError:
+            return None
+    
+    def get_position_range(self):
+        """
+        This method gets the range of the position
+        over all children.
+        """
+        position_range = [self.position]
+        
+        for child in self.children.all():
+            position_range += child.get_position_range()
+        
+        return position_range
+    
+    def move(self, direction='down'):
+        swap = None
+        
+        if direction == 'up':
+            swap = self.get_previous_forum()
+            increment = False
+        
+        if direction == 'down':
+            swap = self.get_next_forum()
+            increment = True
+        
+        if not swap:
+            return False
+        
+        self_range = self.get_position_range()
+        swap_range = swap.get_position_range()
+        
+        base = Forum.objects.only('position').order_by('-position')[0].position * 2
+        
+        if direction == 'up':
+            addition = base - len(self_range)
+        else:
+            addition = base + len(self_range)
+        
+        # Move to safe position.
+        Forum.objects.update_position(swap_range, base)
+        
+        # Move ourself to where we should go.
+        Forum.objects.update_position(self_range, len(swap_range), increment)
+        
+        # Move the swap to where it should go.
+        Forum.objects.update_position(base, addition, False)
+        
+        return True
 
 class Thread(models.Model):
     """

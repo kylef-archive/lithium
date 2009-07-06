@@ -1,4 +1,4 @@
-from django.db import connection, models
+from django.db import connection, models, transaction
 
 # from lithium.forum.models import Thread, Post
 
@@ -19,21 +19,34 @@ class ForumManager(models.Manager):
             'thread_count': thread_count_query,
         })
     
-    def update_position(self, pk, addition=1, increment=True):
+    def update_position(self, position, addition=1, increment=True):
+        if isinstance(position, (list, tuple)):
+            if position[0] == position[-1]:
+                where = '%s == %d' % (self.model._meta.get_field('position').column, position[0])
+            else:
+                where = '%(position)s >= %(start)d AND %(position)s <= %(end)d' % {
+                    'position': self.model._meta.get_field('position').column,
+                    'start': position[0],
+                    'end': position[-1]
+                }
+        else:
+            where = '%s >= %d' %  (self.model._meta.get_field('position').column, position)
+        
         if increment == True:
             increment = '+'
         else:
             increment = '-'
         
-        query = 'UPDATE %(table)s SET %(position)s = %(position)s %(increment)s %(addition)s WHERE %(position)s >= %(pk)s' % {
+        query = 'UPDATE %(table)s SET %(position)s = %(position)s %(increment)s %(addition)d WHERE %(where)s' % {
             'table': self.model._meta.db_table,
             'position': self.model._meta.get_field('position').column,
             'increment': increment,
             'addition': addition,
-            'pk': pk
+            'where': where
         }
         cursor = connection.cursor()
         cursor.execute(query)
+        transaction.commit_unless_managed()
 
 class ThreadManager(models.Manager):
     def get_query_set(self):
