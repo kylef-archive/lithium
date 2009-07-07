@@ -9,5 +9,6 @@ Here is a list of the applications which lithium provides.
     :maxdepth: 1
     
     blog
+    forum
     contact
     wiki

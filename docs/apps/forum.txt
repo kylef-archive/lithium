@@ -1,0 +1,72 @@
+.. _forum-index:
+
+=================
+Lithium forum app
+=================
+
+.. module:: lithium.forum
+	:synopsis: Lithium forum application
+
+Quick start guide
+=================
+
+To get started using the ``forum`` app, follow these steps:
+
+	#. Install the blog app by adding ``'lithium.forum'`` to
+	   ``INSTALLED_APPS``.
+	
+	#. Run ``manage.py syncdb`` so that Django will create the forum tables.
+	
+	#. Add the blog app's URLs to your project's ``urls.py``:
+	
+		.. code-block:: python
+		
+			urlpatterns = patterns('',
+				...
+				url(r'^forum/', include('lithium.forum.urls')),
+				...
+			)
+
+Settings
+========
+
+Some of the application's behavior can be configured by adding the appropriate settings to your project's settings file.
+
+``FORUM_THREAD_PAGINATE_BY``
+~~~~~~~~~~~~~~~~~~~~
+
+Default: 40
+
+This is the amount of threads per page on any thread list pages.
+
+``FORUM_POST_PAGINATE_BY``
+~~~~~~~~~~~~~
+
+Default: 20
+
+The amount of posts to display on a thread detail page.
+
+``FORUM_DEFAULT_READ_PERMISSION``
+~~~~~~~~~~~~~~~~~~~~~
+
+Default: 1
+
+The default read permission.
+
+- 1 = Anonymous (Anonymous, User, Staff and Superuser may read thread or post inside this forum)
+- 2 = User (User, Staff and Superuser may read a thread or post inside this forum)
+- 3 = Staff (Staff and Superuser may read a thread or post inside this forum)
+- 4 = Superuser (Only superusers may read a thread or post inside this forum)
+
+``FORUM_DEFAULT_WRITE_PERMISSION``
+~~~~~~~~~~~~~~~~~~~~
+
+Default: 2
+
+The default write permission.
+
+- 1 = Anonymous (Anonymous, User, Staff and Superuser may create a thread or post inside this forum)
+- 2 = User (User, Staff and Superuser may create a thread or post inside this forum)
+- 3 = Staff (Staff and Superuser may create a thread or post inside this forum)
+- 4 = Superuser (Only superusers may create a thread or post inside this forum)
+
