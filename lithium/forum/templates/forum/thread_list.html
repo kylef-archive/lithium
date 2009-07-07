@@ -12,7 +12,7 @@
 {% render_forum_list forum.children.all %}
 {% endif %}
 
-<h3>{% trans 'Threads' %} {% if not forum.is_category %}<a href="{{ forum.get_create_thread_url }}">(create)</a>{% endif %}</h3>
+<h3>{% trans 'Threads' %} {% if not forum.is_category and can_create %}<a href="{{ forum.get_create_thread_url }}">(create)</a>{% endif %}</h3>
 <table>
     <tr>
         <th>Thread</th>

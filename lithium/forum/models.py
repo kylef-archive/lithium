@@ -7,11 +7,19 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
+from lithium.conf import settings
 from lithium.forum.managers import ForumManager, ThreadManager
 
 t = 'abcdefghijkmnopqrstuvwwxyzABCDEFGHIJKLOMNOPQRSTUVWXYZ1234567890'
 def generate_extra_id(length=4):
     return ''.join([random.choice(t) for i in range(length)])
+
+FORUM_PERMISSIONS = (
+    (1, _('Anonymous')),
+    (2, _('User')),
+    (3, _('Staff')),
+    (4, _('Superuser')),
+)
 
 class Forum(models.Model):
     title = models.CharField(_('title'), max_length=255)
@@ -22,6 +30,9 @@ class Forum(models.Model):
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     position = models.PositiveIntegerField(_('position'), editable=False, default=0)
     level = models.PositiveIntegerField(_('level'), editable=False, default=0)
+    
+    read = models.IntegerField(_('read permission'), choices=FORUM_PERMISSIONS, help_text=_('Who read posts in this forum.'), default=settings.FORUM_DEFAULT_READ_PERMISSION)
+    write = models.IntegerField(_('write permission'), choices=FORUM_PERMISSIONS, help_text=_('Who can create posts in this forum.'), default=settings.FORUM_DEFAULT_WRITE_PERMISSION)
     
     objects = ForumManager()
     

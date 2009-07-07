@@ -8,23 +8,32 @@ from django.core.paginator import Paginator, InvalidPage
 from lithium.conf import settings
 from lithium.forum.models import Forum, Thread, Post
 from lithium.forum.forms import ThreadCreateForm, ThreadReplyForm
+from lithium.forum.utils import user_permission_level
+
+def forum_index(request):
+    user_permission = user_permission_level(request.user)
+    return object_list(request, queryset=Forum.objects.filter(read__lte=user_permission))
 
 def forum_detail(request, forum):
+    user_permission = user_permission_level(request.user)
+    
     try:
-        forum = Forum.objects.filter(slug=forum).get()
+        forum = Forum.objects.filter(slug=forum, read__lte=user_permission).get()
     except ObjectDoesNotExist:
         raise Http404
     
     return object_list(request,
         queryset=Thread.objects.filter(forum=forum),
-        extra_context={'forum': forum},
+        extra_context={'forum': forum, 'can_create': forum.write < user_permission},
         paginate_by=settings.FORUM_THREAD_PAGINATE_BY,
         template_object_name='thread'
     )
 
 def thread_create(request, forum):
+    user_permission = user_permission_level(request.user)
+    
     try:
-        forum = Forum.objects.filter(slug=forum).get()
+        forum = Forum.objects.filter(slug=forum, write__lte=user_permission).get()
     except ObjectDoesNotExist:
         raise Http404
     
@@ -52,8 +61,11 @@ def thread_create(request, forum):
     return render_to_response('forum/thread_create.html', template_context, RequestContext(request))
 
 def thread_detail(request, forum, slug, page=None, display_posts=True, paginate_by=settings.FORUM_POST_PAGINATE_BY, template_name='forum/thread_detail.html'):
+    user_permission = user_permission_level(request.user)
+    
     try:
-        thread = Thread.objects.filter(forum__slug=forum, slug=slug).get()
+        forum = Forum.objects.filter(slug=forum, read__lte=user_permission).get()
+        thread = Thread.objects.filter(forum=forum, slug=slug).get()
     except ObjectDoesNotExist:
         raise Http404
     
@@ -85,6 +97,8 @@ def thread_detail(request, forum, slug, page=None, display_posts=True, paginate_
     
     if thread.is_locked:
         form = None
+    elif forum.write > user_permission:
+        form = None
     else:
         if request.method == 'POST':
             form = ThreadReplyForm(request.POST)
@@ -102,5 +116,6 @@ def thread_detail(request, forum, slug, page=None, display_posts=True, paginate_
             form = ThreadReplyForm()
     
     template_context['form'] = form
+    template_context['can_reply'] = form != None
     
     return render_to_response(template_name, template_context, RequestContext(request))

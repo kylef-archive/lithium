@@ -3,9 +3,8 @@
 
 {% block content %}
 {% render_parent_list thread.get_parent_list %}
-
 <h2>
-    <a href="{{ thread.get_absolute_url }}">{{ thread }}</a> {% if not thread.is_locked %}(<a href="{{ thread.get_reply_url }}">{% trans 'reply' %}</a>){% endif %}
+    <a href="{{ thread.get_absolute_url }}">{{ thread }}</a> {% if not thread.is_locked and can_reply %}(<a href="{{ thread.get_reply_url }}">{% trans 'reply' %}</a>){% endif %}
 </h2>
 
 {% if posts %}
