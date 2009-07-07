@@ -1,0 +1,4 @@
+<p class="note"><a href="{% url forum.forum_index %}">Forum Index</a> | 
+{% for parent in parent_list %}
+    <a href="{{ parent.get_absolute_url }}" title="{{ parent }}">{{ parent }}</a>{% ifnotequal parent parent_list|last %} | {% endifnotequal %}
+{% endfor %}</p>

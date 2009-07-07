@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2><a href="{{ forum.get_absolute_url }}">{{ forum }}</a></h2>
+
+{% if form %}
+<form action="{{ forum.get_thread_create_url }}" method="POST">
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+{% endif %}
+{% endblock %}

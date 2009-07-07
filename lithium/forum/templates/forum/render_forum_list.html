@@ -1,0 +1,13 @@
+{% load forum %}
+{% for forum,structure in forum_list|tree_structure %}
+  {% if structure.new_level %}<ul><li>{% else %}</li><li>{% endif %}
+      
+    {% if forum.is_category %}
+        <strong>{{ forum }}</strong>
+    {% else %}
+        <a href="{{ forum.get_absolute_url }}">{{ forum }}</a>
+        {{ forum.description }}
+    {% endif %}
+    
+  {% for level in structure.closed_levels %}</li></ul>{% endfor %}
+{% endfor %}

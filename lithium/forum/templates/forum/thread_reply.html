@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n forum %}
+
+{% block content %}
+{% render_parent_list thread.get_parent_list %}
+<h2><a href="{{ thread.get_absolute_url }}">{{ thread }}</a></h2>
+
+{% if thread.is_locked %}
+<p>This thread is locked!<p>
+{% endif %}
+
+{% if not can_reply %}
+<p>You cannot reply to this post.<p>
+{% endif %}
+
+{% if form %}
+{% render_reply_form thread form %}
+{% endif %}
+{% endblock %}

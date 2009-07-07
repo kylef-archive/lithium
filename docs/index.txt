@@ -16,6 +16,7 @@ Applications
 Applications included with the latest version of Lithium:
 
     * :ref:`Blog <blog-index>`
+    * :red:`Forum <forum-index>`
     * :ref:`Contact <contact-index>`
     * :ref:`Wiki <wiki-index>`
 
@@ -24,7 +25,6 @@ Applications which are not finished
 
 These applications are still being developed, wheather they are testing, or not even started yet. This list is more of a list of what's left to-do:
 
-    * Forum
     * Store
     * Profiles
     * Media

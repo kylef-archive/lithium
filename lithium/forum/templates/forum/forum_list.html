@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n forum %}
+
+{% block title %}{% trans 'Forum Index' %}{% endblock %}
+
+{% block content %}
+{% render_forum_list object_list %}
+{% endblock %}
