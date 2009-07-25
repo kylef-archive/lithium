@@ -69,6 +69,9 @@ def page_edit(request, slug):
 def page_discuss(request, *args, **kwargs):
     return page_detail(request, template_name='wiki/page_discuss.html', *args, **kwargs)
 
+def page_children(request, *args, **kwargs):
+    return page_detail(request, template_name='wiki/page_children.html', *args, **kwargs)
+
 def page_history(request, slug, **kwargs):
     try:
         page = Page.objects.filter(slug=slug).get()

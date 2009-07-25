@@ -17,6 +17,8 @@ PAGE_PERMISSIONS = (
 )
 
 class Page(models.Model):
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children')
+    
     title = models.CharField(_('title'), max_length=255, blank=True)
     slug = models.SlugField(_('slug'))
     permission = models.IntegerField(_('permission'), choices=PAGE_PERMISSIONS, help_text=_('Who can edit this page.'), default=0)
@@ -43,6 +45,11 @@ class Page(models.Model):
     def get_history_url(self):
         return ('wiki.page_history', None, {'slug': self.slug})
     get_history_url = models.permalink(get_history_url)
+    
+    #@models.permalink
+    def get_children_url(self):
+        return ('wiki.page_children', None, {'slug': self.slug})
+    get_children_url = models.permalink(get_children_url)
     
     def user_can_edit(self, user):
         permission = self.permission or settings.WIKI_DEFAULT_USER_PERMISSION
@@ -71,6 +78,17 @@ class Page(models.Model):
         else:
             return ''
     content = property(content)
+    
+    def has_children(self):
+        if not self.pk:
+            return 0
+        return self.children.count() > 0
+    
+    def delete(self, *args, **kwargs):
+        for child in self.children.all():
+            child.delete()
+
+        super(Page, self).delete(*args, **kwargs)
 
 class Revision(models.Model):
     page = models.ForeignKey(Page)
