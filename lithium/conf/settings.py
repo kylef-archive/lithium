@@ -9,7 +9,7 @@ ENABLE_COMMENTS_BY_DEFAULT = getattr(settings, 'ENABLE_COMMENTS_BY_DEFAULT', Tru
 
 # lithium.blog
 BLOG_PAGINATE_BY = getattr(settings, 'BLOG_PAGINATE_BY', 10)
-BLOG_PING = getattr(settings, 'BLOG_PING', not DEBUG)
+BLOG_PING = getattr(settings, 'BLOG_PING', False)
 BLOG_PING_SERVERS = getattr(settings, 'BLOG_PING_SERVERS', (
     'http://blogsearch.google.com/ping/RPC2',
     'http://rpc.technorati.com/rpc/ping',

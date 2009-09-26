@@ -105,7 +105,7 @@ This is the amount of posts per page on any post list pages, such as the main po
 ``BLOG_PING``
 ~~~~~~~~~~~~~
 
-Default: ``not DEBUG``, this means that if ``DEBUG`` is set to True, it will not ping, if ``DEBUG`` is False, it will ping
+Default: False
 
 When a post is created, if this is set to True, a post will be pinged to the servers in ``BLOG_PING_SERVERS``.
 
