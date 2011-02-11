@@ -9,6 +9,7 @@ from django.db import models
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.contrib.comments import moderation
 
 from lithium.conf import settings
 from lithium.blog.managers import CurrentSitePostManager
@@ -79,3 +80,7 @@ def ping_post(sender, instance, signal, *args, **kwargs):
                     reply = j.weblogUpdates.ping(site.name, blog, post)
 
 models.signals.post_save.connect(ping_post, sender=Post)
+
+class PostCommentModerator(moderation.CommentModerator):
+    enabled_field = 'enable_comments'
+moderation.moderator.register(Post, PostCommentModerator)
