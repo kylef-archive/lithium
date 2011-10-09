@@ -4,7 +4,7 @@ import lithium
 
 packages = ['lithium',]
 core = ['conf', 'views',]
-apps = ['blog', 'contact',]
+apps = ['blog', 'contact', 'forum', 'wiki']
 templatetags = ['blog',]
 package_data = {}
 
