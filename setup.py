@@ -15,7 +15,7 @@ for item in apps + core + templatetags:
     packages.append('lithium.%s' % item)
 
 for app in apps:
-    package_data['lithium.%s' % app] = [('templates/%s/*.html' % app),]
+    package_data['lithium.%s' % app] = ['templates/%s/*.html' % app, 'templates/%s/*.txt' % app]
 
 setup(
     name='lithium',
