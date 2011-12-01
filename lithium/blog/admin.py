@@ -54,7 +54,7 @@ class PostAdmin(admin.ModelAdmin):
         """
         If the user is a superuser, then display all posts. Otherwise only show their own posts.
         """
-        if request.user.is_superuser:
+        if request.user.has_perm('blog.change_all_posts'):
             return Post.objects.all()
         return Post.objects.filter(author=request.user)
     
@@ -67,7 +67,7 @@ class PostAdmin(admin.ModelAdmin):
         if not has_class_permission:
             return False
         
-        if obj is not None and not request.user.is_superuser and request.user.id != obj.author.id:
+        if obj is not None and not request.user.has_perm('blog.change_all_posts') and request.user.id != obj.author.id:
             return False
         
         return True

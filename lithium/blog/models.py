@@ -48,7 +48,10 @@ class Post(models.Model):
     
     class Meta:
         ordering = ('-pub_date',)
-        permissions = (('can_read_private', 'Can read private posts'),)
+        permissions = (
+            ('can_read_private', 'Can read private posts'),
+            ('change_all_posts', 'Can change other users posts'),
+        )
     
     def __unicode__(self):
         return self.title
