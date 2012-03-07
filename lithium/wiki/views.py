@@ -104,7 +104,7 @@ def revision_detail(request, slug, pk):
     except ObjectDoesNotExist:
         raise Http404, "No revision found matching the query"
 
-    if not page.has_read_permission(request.user):
+    if not revision.page.has_read_permission(request.user):
         if request.user.is_anonymous():
             return HttpResponseRedirect('%s?%s=%s' % (settings.LOGIN_URL, REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
         else:
