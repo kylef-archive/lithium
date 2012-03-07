@@ -21,7 +21,7 @@ class Page(models.Model):
     
     title = models.CharField(_('title'), max_length=255, blank=True)
     slug = models.SlugField(_('slug'))
-    permission = models.IntegerField(_('permission'), choices=PAGE_PERMISSIONS, help_text=_('Who can edit this page.'), default=0)
+    write_permission = models.IntegerField(_('write permission'), choices=PAGE_PERMISSIONS, help_text=_('Who can edit this page.'), default=0)
     
     def __unicode__(self):
         return self.title
@@ -52,7 +52,7 @@ class Page(models.Model):
     get_children_url = models.permalink(get_children_url)
     
     def user_can_edit(self, user):
-        permission = self.permission or settings.WIKI_DEFAULT_USER_PERMISSION
+        permission = self.write_permission or settings.WIKI_DEFAULT_WRITE_PERMISSION
         user_perm = int(not user.is_anonymous()) + 1
         
         if user.is_staff:

@@ -32,12 +32,12 @@ Settings
 
 Some of the application's behavior can be configured by adding the appropriate settings to your project's settings file.
 
-``WIKI_DEFAULT_USER_PERMISSION``
+``WIKI_DEFAULT_WRITE_PERMISSION``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Default: 1
 
-This is the default permission required for a page. You can override this per page inside the administration panel. Here are a list of permissions you can use:
+This is the default permission required to write to a page. You can override this per page inside the administration panel. Here are a list of permissions you can use:
 
 - 1 = Anonymous (Anonymouse, User, Staff and Superuser may edit)
 - 2 = User (User, Staff and Superuser may edit)
