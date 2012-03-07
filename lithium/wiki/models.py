@@ -51,9 +51,26 @@ class Page(models.Model):
     def get_children_url(self):
         return ('wiki.page_children', None, {'slug': self.slug})
     get_children_url = models.permalink(get_children_url)
-    
+
+    def get_read_permission(self):
+        if self.read_permission:
+            return self.read_permission
+
+        if self.parent:
+            return self.parent.get_read_permission()
+
+        return settings.WIKI_DEFAULT_READ_PERMISSION
+
+    def get_write_permission(self):
+        if self.write_permission:
+            return self.write_permission
+
+        if self.parent:
+            return self.parent.get_write_permission()
+
+        return settings.WIKI_DEFAULT_WRITE_PERMISSION
+
     def user_can_edit(self, user):
-        permission = self.write_permission or settings.WIKI_DEFAULT_WRITE_PERMISSION
         user_perm = int(not user.is_anonymous()) + 1
         
         if user.is_staff:
@@ -62,11 +79,9 @@ class Page(models.Model):
         if user.is_superuser:
             user_perm = 4
         
-        return user_perm >= permission
+        return user_perm >= self.get_write_permission()
 
     def has_read_permission(self, user):
-        permission = self.read_permission or settings.WIKI_DEFAULT_READ_PERMISSION
-
         user_perm = int(not user.is_anonymous()) + 1
 
         if user.is_staff:
@@ -75,7 +90,7 @@ class Page(models.Model):
         if user.is_superuser:
             user_perm = 4
 
-        return user_perm >= permission
+        return user_perm >= self.get_read_permission()
     
     #@property
     def revision(self):
