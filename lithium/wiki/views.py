@@ -32,7 +32,13 @@ def page_detail(request, slug, template_name='wiki/page_detail.html'):
         page = Page.objects.filter(slug=slug).get()
     except ObjectDoesNotExist:
         page = Page(title=title(slug), slug=slug)
-    
+
+    if not page.has_read_permission(request.user):
+        if request.user.is_anonymous():
+            return HttpResponseRedirect('%s?%s=%s' % (settings.LOGIN_URL, REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
+        else:
+            return render_to_response('wiki/permission_denied.html', context_instance=RequestContext(request))
+
     return render_to_response(template_name,
         {'page':page, 'page_exists': bool(page.pk)}, RequestContext(request))
 
@@ -77,7 +83,13 @@ def page_history(request, slug, **kwargs):
         page = Page.objects.filter(slug=slug).get()
     except ObjectDoesNotExist:
         raise Http404, "No page found matching the query"
-    
+
+    if not page.has_read_permission(request.user):
+        if request.user.is_anonymous():
+            return HttpResponseRedirect('%s?%s=%s' % (settings.LOGIN_URL, REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
+        else:
+            return render_to_response('wiki/permission_denied.html', context_instance=RequestContext(request))
+
     kwargs['queryset'] = Revision.objects.filter(page=page)
     kwargs['extra_context'] = {'page': page}
     kwargs['template_name'] = 'wiki/page_history.html'
@@ -91,7 +103,13 @@ def revision_detail(request, slug, pk):
         revision = Revision.objects.filter(page__slug=slug, pk=pk).get()
     except ObjectDoesNotExist:
         raise Http404, "No revision found matching the query"
-    
+
+    if not page.has_read_permission(request.user):
+        if request.user.is_anonymous():
+            return HttpResponseRedirect('%s?%s=%s' % (settings.LOGIN_URL, REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
+        else:
+            return render_to_response('wiki/permission_denied.html', context_instance=RequestContext(request))
+
     return render_to_response('wiki/revision_detail.html', {'revision': revision,}, RequestContext(request))
 
 def revision_revert(request, slug, pk):
@@ -124,14 +142,20 @@ def revision_diff(request, slug):
         b = int(request.GET.get('b'))
     else:
         return HttpResponseBadRequest(u'You must select two revisions.')
-    
+
     try:
         page = Page.objects.filter(slug=slug).get()
         revisionA = Revision.objects.filter(page=page, pk=a).get()
         revisionB = Revision.objects.filter(page=page, pk=b).get()
     except ObjectDoesNotExist:
         raise Http404, "No revision found matching the query"
-    
+
+    if not page.has_read_permission(request.user):
+        if request.user.is_anonymous():
+            return HttpResponseRedirect('%s?%s=%s' % (settings.LOGIN_URL, REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
+        else:
+            return render_to_response('wiki/permission_denied.html', context_instance=RequestContext(request))
+
     if revisionA.content != revisionB.content:
         d = difflib.unified_diff(
             revisionA.content.splitlines(),

@@ -22,7 +22,8 @@ class Page(models.Model):
     title = models.CharField(_('title'), max_length=255, blank=True)
     slug = models.SlugField(_('slug'))
     write_permission = models.IntegerField(_('write permission'), choices=PAGE_PERMISSIONS, help_text=_('Who can edit this page.'), default=0)
-    
+    read_permission = models.IntegerField(_('read permission'), choices=PAGE_PERMISSIONS, help_text=_('Who can read this page.'), default=0)
+
     def __unicode__(self):
         return self.title
     
@@ -61,6 +62,19 @@ class Page(models.Model):
         if user.is_superuser:
             user_perm = 4
         
+        return user_perm >= permission
+
+    def has_read_permission(self, user):
+        permission = self.read_permission or settings.WIKI_DEFAULT_READ_PERMISSION
+
+        user_perm = int(not user.is_anonymous()) + 1
+
+        if user.is_staff:
+            user_perm = 3
+
+        if user.is_superuser:
+            user_perm = 4
+
         return user_perm >= permission
     
     #@property
