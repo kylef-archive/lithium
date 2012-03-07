@@ -7,12 +7,15 @@ core = ['conf', 'views',]
 apps = ['blog', 'contact', 'forum', 'wiki']
 templatetags = ['blog',]
 package_data = {}
+uses_migrations = ['wiki']
 
 for item in templatetags:
     packages.append('lithium.%s.templatetags' % item)
 
 for item in apps + core + templatetags:
     packages.append('lithium.%s' % item)
+    if item in uses_migrations:
+        packages.append('lithium.%s.migrations' % item)
 
 for app in apps:
     package_data['lithium.%s' % app] = ['templates/%s/*.html' % app, 'templates/%s/*.txt' % app]
