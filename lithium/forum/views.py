@@ -23,7 +23,7 @@ def forum_detail(request, forum):
         raise Http404
     
     return object_list(request,
-        queryset=Thread.objects.filter(forum=forum),
+        queryset=Thread.objects.select_related().filter(forum=forum),
         extra_context={'forum': forum, 'can_create': forum.write < user_permission},
         paginate_by=settings.FORUM_THREAD_PAGINATE_BY,
         template_object_name='thread'
@@ -32,7 +32,7 @@ def forum_detail(request, forum):
 def thread_list(request):
     user_permission = user_permission_level(request.user)
     return object_list(request,
-        queryset=Thread.objects.filter(forum__read__lte=user_permission),
+        queryset=Thread.objects.select_related().filter(forum__read__lte=user_permission),
         paginate_by=settings.FORUM_THREAD_PAGINATE_BY,
         template_object_name='thread'
     )
@@ -72,15 +72,14 @@ def thread_detail(request, forum, slug, page=None, display_posts=True, paginate_
     user_permission = user_permission_level(request.user)
     
     try:
-        forum = Forum.objects.filter(slug=forum, read__lte=user_permission).get()
-        thread = Thread.objects.filter(forum=forum, slug=slug).get()
+        thread = Thread.objects.select_related().filter(forum__slug=forum, forum__read__lte=user_permission, slug=slug).get()
     except ObjectDoesNotExist:
         raise Http404
     
     template_context = dict(thread=thread)
     
     if display_posts:
-        queryset = Post.objects.filter(thread=thread)
+        queryset = Post.objects.select_related('author').filter(thread=thread)
         paginator = Paginator(queryset, paginate_by)
         
         if page == None:
@@ -105,7 +104,7 @@ def thread_detail(request, forum, slug, page=None, display_posts=True, paginate_
     
     if thread.is_locked:
         form = None
-    elif forum.write > user_permission:
+    elif thread.forum.write > user_permission:
         form = None
     else:
         if request.method == 'POST':
