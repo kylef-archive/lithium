@@ -23,7 +23,7 @@ class ForumAdmin(admin.ModelAdmin):
         urls = super(ForumAdmin, self).get_urls()
         
         new_urls = patterns('',
-            url(r'^move/', self.admin_site.admin_view(self.move), name='admin.forum_move'),
+            url(r'^move/', self.admin_site.admin_view(self.move), name='forum_move'),
         )
     
         return new_urls + urls
@@ -67,7 +67,7 @@ class ForumAdmin(admin.ModelAdmin):
     add_child.short_description = 'Add sub-forum'
     
     def position_link(self, obj):
-        url = reverse('admin.forum_move')
+        url = reverse('admin:forum_move')
         up = url + '?f=%s&d=%s' % (obj.pk, 'up')
         down = url + '?f=%s&d=%s' % (obj.pk, 'down')
         
