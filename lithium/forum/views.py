@@ -29,6 +29,14 @@ def forum_detail(request, forum):
         template_object_name='thread'
     )
 
+def thread_list(request):
+    user_permission = user_permission_level(request.user)
+    return object_list(request,
+        queryset=Thread.objects.filter(forum__read__lte=user_permission),
+        paginate_by=settings.FORUM_THREAD_PAGINATE_BY,
+        template_object_name='thread'
+    )
+
 def thread_create(request, forum):
     user_permission = user_permission_level(request.user)
     

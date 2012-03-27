@@ -3,6 +3,7 @@ from lithium.forum.models import Forum
 
 urlpatterns = patterns('lithium.forum.views',
     url(r'^$', 'forum_index', name='forum.forum_index'),
+    url(r'^threads/$', 'thread_list', name='forum.threads'),
     url(r'^(?P<forum>[-\w]+)/$', 'forum_detail', name='forum.forum_detail'),
     url(r'^(?P<forum>[-\w]+)/create/$', 'thread_create', name='forum.thread_create'),
     url(r'^(?P<forum>[-\w]+)/(?P<slug>[-\w]+)/$', 'thread_detail', name='forum.thread_detail'),
