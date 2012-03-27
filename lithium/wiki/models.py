@@ -27,30 +27,25 @@ class Page(models.Model):
     def __unicode__(self):
         return self.title
     
-    #@models.permalink
+    @models.permalink
     def get_absolute_url(self):
         return ('wiki.page_detail', None, {'slug': self.slug})
-    get_absolute_url = models.permalink(get_absolute_url)
     
-    #@models.permalink
+    @models.permalink
     def get_edit_url(self):
         return ('wiki.page_edit', None, {'slug': self.slug})
-    get_edit_url = models.permalink(get_edit_url)
     
-    #@models.permalink
+    @models.permalink
     def get_discuss_url(self):
         return ('wiki.page_discuss', None, {'slug': self.slug})
-    get_discuss_url = models.permalink(get_discuss_url)
     
-    #@models.permalink
+    @models.permalink
     def get_history_url(self):
         return ('wiki.page_history', None, {'slug': self.slug})
-    get_history_url = models.permalink(get_history_url)
     
-    #@models.permalink
+    @models.permalink
     def get_children_url(self):
         return ('wiki.page_children', None, {'slug': self.slug})
-    get_children_url = models.permalink(get_children_url)
 
     def get_read_permission(self):
         if self.read_permission:
@@ -92,21 +87,19 @@ class Page(models.Model):
 
         return user_perm >= self.get_read_permission()
     
-    #@property
+    @property
     def revision(self):
         try:
             return self.revision_set.latest('pub_date')
         except ObjectDoesNotExist:
             return None
-    revision = property(revision)
     
-    #@property
+    @property
     def content(self):
         if self.revision:
             return self.revision.content
         else:
             return ''
-    content = property(content)
     
     def has_children(self):
         if not self.pk:
@@ -134,28 +127,24 @@ class Revision(models.Model):
     def __unicode__(self):
         return u'%s' % self.pk
     
-    #@models.permalink
+    @models.permalink
     def get_absolute_url(self):
         return ('wiki.revision_detail', None, {'slug': self.page.slug, 'pk': self.pk})
-    get_absolute_url = models.permalink(get_absolute_url)
     
-    #@models.permalink
+    @models.permalink
     def get_revert_url(self):
         return ('wiki.revision_revert', None, {'slug': self.page.slug, 'pk': self.pk})
-    get_revert_url = models.permalink(get_revert_url)
     
-    #@property
+    @property
     def title(self):
         return self.page.title
-    title = property(title)
     
-    #@property
+    @property
     def content(self):
         if self.text:
             return self.text.content
         else:
             return ''
-    content = property(content)
 
 class Text(models.Model):
     content = models.TextField(_('content'), blank=True)

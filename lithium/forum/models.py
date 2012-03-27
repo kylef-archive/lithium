@@ -149,15 +149,13 @@ class Forum(models.Model):
         
         return True
     
-    #@models.permalink
+    @models.permalink
     def get_absolute_url(self):
         return ('forum.forum_detail', None, {'forum': self.slug})
-    get_absolute_url = models.permalink(get_absolute_url)
     
-    #@models.permalink
+    @models.permalink
     def get_create_thread_url(self):
         return ('forum.thread_create', None, {'forum': self.slug})
-    get_create_thread_url = models.permalink(get_create_thread_url)
     
     def has_children(self):
         return self.children.count() > 0
@@ -207,15 +205,13 @@ class Thread(models.Model):
             self.slug = '%s-%s' % (self.slug, generate_extra_id())
             self.save(*args, **kwargs)
     
-    #@models.permalink
+    @models.permalink
     def get_absolute_url(self):
         return ('forum.thread_detail', None, {'forum': self.forum.slug, 'slug': self.slug})
-    get_absolute_url = models.permalink(get_absolute_url)
     
-    #@models.permalink
+    @models.permalink
     def get_reply_url(self):
         return ('forum.thread_reply', None, {'forum': self.forum.slug, 'slug': self.slug})
-    get_reply_url = models.permalink(get_reply_url)
     
     def get_parent_list(self):
         parent_list = self.forum.get_parent_list()

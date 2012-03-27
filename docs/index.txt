@@ -16,7 +16,7 @@ Applications
 Applications included with the latest version of Lithium:
 
     * :ref:`Blog <blog-index>`
-    * :red:`Forum <forum-index>`
+    * :ref:`Forum <forum-index>`
     * :ref:`Contact <contact-index>`
     * :ref:`Wiki <wiki-index>`
 

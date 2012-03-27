@@ -26,9 +26,9 @@ class Category(models.Model):
     def __unicode__(self):
         return self.title
     
+    @models.permalink
     def get_absolute_url(self):
         return ('blog.category_detail', None, {'tag': self.slug})
-    get_absolute_url = models.permalink(get_absolute_url)
 
 class Post(models.Model):
     title = models.CharField(_('title'), max_length=255)
@@ -53,14 +53,13 @@ class Post(models.Model):
     def __unicode__(self):
         return self.title
     
-    #@models.permalink
+    @models.permalink
     def get_absolute_url(self):
         return ('blog.post_detail', None, {
             'year': self.pub_date.strftime("%Y"),
             'month': self.pub_date.strftime("%b").lower(),
             'day': self.pub_date.strftime("%d"),
             'slug': self.slug})
-    get_absolute_url = models.permalink(get_absolute_url)
     
     def get_next_post(self):
         return self.get_next_by_pub_date()
