@@ -12,6 +12,7 @@
 {% render_forum_list forum.children.all %}
 {% endif %}
 
+{% if not forum.is_category %}
 <h3>{% trans 'Threads' %} {% if not forum.is_category and can_create %}<a href="{{ forum.get_create_thread_url }}">(create)</a>{% endif %}</h3>
 <table>
     <tr>
@@ -28,5 +29,6 @@
     </tr>
   {% endfor %}
 </table>
+{% endif %}
 
 {% endblock %}
