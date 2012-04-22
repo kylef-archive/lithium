@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from lithium.conf import settings
-from lithium.wiki.utils import title
+from lithium.wiki.utils import title, user_permission_level
 
 PAGE_PERMISSIONS = (
     (0, 'Use global setting'),
@@ -66,26 +66,10 @@ class Page(models.Model):
         return settings.WIKI_DEFAULT_WRITE_PERMISSION
 
     def user_can_edit(self, user):
-        user_perm = int(not user.is_anonymous()) + 1
-        
-        if user.is_staff:
-            user_perm = 3
-        
-        if user.is_superuser:
-            user_perm = 4
-        
-        return user_perm >= self.get_write_permission()
+        return user_permission_level(user) >= self.get_write_permission()
 
     def has_read_permission(self, user):
-        user_perm = int(not user.is_anonymous()) + 1
-
-        if user.is_staff:
-            user_perm = 3
-
-        if user.is_superuser:
-            user_perm = 4
-
-        return user_perm >= self.get_read_permission()
+        return user_permission_level(user) >= self.get_read_permission()
     
     @property
     def revision(self):
