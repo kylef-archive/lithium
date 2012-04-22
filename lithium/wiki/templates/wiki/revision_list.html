@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Recent Changes' %}{% endblock %}
+
+{% block content %}
+    <h2>{% trans 'Recent Changes' %}</h2>
+
+    <ul>
+      {% for revision in revision_list %}
+        <li>
+            Revision <a href="{{ revision.get_absolute_url }}">#{{ revision }}</a>
+            on <a href="{{ revision.page.get_absolute_url }}">{{ revision.page }}</a> by
+          {% if revision.author %}
+            <a href="{{ revision.author.get_absolute_url }}">{{ revision.author }}</a>
+          {% else %}
+            {{ revision.ip }}
+          {% endif %}
+          {{ revision.comment }}
+        </li>
+      {% endfor %}
+    </ul>
+{% endblock %}

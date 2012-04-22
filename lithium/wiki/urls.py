@@ -1,8 +1,11 @@
 from django.conf.urls.defaults import *
-from lithium.wiki.models import Page
+from django.views.generic import ListView
+from lithium.wiki.models import Page, Revision
 
 urlpatterns = patterns('lithium.wiki.views',
     url(r'^$', 'page_detail', dict(slug='Start'), 'wiki.start_page'),
+    url(r'^recent-changes/$',
+        ListView.as_view(queryset=Revision.objects.all().select_related())),
     url(r'^(?P<slug>[-\w]+)/$', 'page_detail', name='wiki.page_detail'),
     url(r'^(?P<slug>[-\w]+)/edit/$', 'page_edit', name='wiki.page_edit'),
     url(r'^(?P<slug>[-\w]+)/history/$', 'page_history', name='wiki.page_history'),
