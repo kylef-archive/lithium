@@ -4,16 +4,19 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.utils.http import urlquote
 from django.core.paginator import Paginator, InvalidPage
+from django.views.decorators.cache import cache_control
 
 from lithium.conf import settings
 from lithium.forum.models import Forum, Thread, Post
 from lithium.forum.forms import ThreadCreateForm, ThreadReplyForm
 from lithium.forum.utils import user_permission_level
 
+@cache_control(must_revalidate=True)
 def forum_index(request):
     user_permission = user_permission_level(request.user)
     return object_list(request, queryset=Forum.objects.filter(read__lte=user_permission))
 
+@cache_control(must_revalidate=True)
 def forum_detail(request, forum):
     user_permission = user_permission_level(request.user)
     
@@ -29,6 +32,7 @@ def forum_detail(request, forum):
         template_object_name='thread'
     )
 
+@cache_control(must_revalidate=True)
 def thread_list(request):
     user_permission = user_permission_level(request.user)
     return object_list(request,
@@ -68,6 +72,7 @@ def thread_create(request, forum):
     
     return render_to_response('forum/thread_create.html', template_context, RequestContext(request))
 
+@cache_control(must_revalidate=True)
 def thread_detail(request, forum, slug, page=None, display_posts=True, paginate_by=settings.FORUM_POST_PAGINATE_BY, template_name='forum/thread_detail.html'):
     user_permission = user_permission_level(request.user)
     
