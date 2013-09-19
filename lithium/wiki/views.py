@@ -21,12 +21,14 @@ from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.views.generic.list_detail import object_list
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.cache import cache_control
 
 from lithium.conf import settings
 from lithium.wiki.models import Page, Revision
 from lithium.wiki.forms import EditForm
 from lithium.wiki.utils import title
 
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def page_detail(request, slug, template_name='wiki/page_detail.html'):
     try:
         page = Page.objects.filter(slug=slug).get()
