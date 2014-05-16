@@ -139,7 +139,7 @@ def revision_revert(request, slug, pk):
     return HttpResponseRedirect(r.get_absolute_url())
 
 def revision_diff(request, slug):
-    if request.GET.get('a').isdigit() and request.GET.get('b').isdigit():
+    if request.GET.get('a', '').isdigit() and request.GET.get('b', '').isdigit():
         a = int(request.GET.get('a'))
         b = int(request.GET.get('b'))
     else:
